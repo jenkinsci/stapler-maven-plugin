@@ -3,7 +3,8 @@ pre.cmd {
 	color: white;
 	font-weight: bold;
 	margin-left: 2em;
-	padding: 0.5em;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
 }
 
 pre.code {
@@ -12,7 +13,8 @@ pre.code {
 	color: navy;
 	font-weight: bold;
 	margin-left: 2em;
-	padding: 0.5em;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
 }
 pre.code .annotation {
 	color: gray;

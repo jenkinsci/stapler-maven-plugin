@@ -6,6 +6,8 @@
 <p>
 	Stapler is a library that "staples" your application objects to URLs, making it easier to write web applications. The core idea of Stapler is to automatically assign URLs for your objects, creating an intuitive URL hierarchy.
 <p>
+	Normally, most of your JSP and servlet goes like this; first, you use parameters and extra path info to locate the object to work with, then use some more parameters and such to perform some operations against it (or perhaps render HTML). Stapler takes care of this first portion by dispatching requests to that object you'll be working with.
+<p>
 	Suppose you are building a web application like the system of java.net, where you got projects, mailing lists, documents and files section, and etc. The following figure shows how Stapler works.
 	
 <div align=center>
@@ -17,7 +19,7 @@
 
 <h3>JSPs and servlets</h3>
 <p>
-	Most of the times JSPs are used to show an object in your application. Stapler allows you to associate JSPs to your application classes, as shown in green circles in the above figure. Stapler weaves those JSPs into the URL hierarchy, and when they get requested, Stapler sets up the environment such that they can access the corresponding application object very easily.
+	Most of the times JSPs are used to show an object in your application. Stapler allows you to associate JSPs to your application classes, as shown in green circles in the above figure. Stapler weaves those JSPs into the URL hierarchy, and when they get requested, Stapler sets up the environment such that they can access the corresponding application object very easily, by the "it" variable (like ${it.name}).
 <p>
 	Similarly, often you want to run some Java code when a certain URL is requested, as shown in red circles in the above figure. For example, when <tt>/project/stapler/delete</tt> is requested, you'd like to delete the project and redirect the user to <tt>/</tt>. With Stapler, this is as easy as defining a method on your application objects. Stapler invokes the method on the right object.
 

@@ -1,11 +1,76 @@
 <html>
 <head>
 	<title>Getting Started</title>
+	<link rel="stylesheet" type="text/css" href="stapler.css" />
 </head>
 <body>
+
+
 
 <h1>Getting Started</h1>
 <p>
 	This document explains how to get started with stapler.
-	
-	<b>TBD</b>
+
+
+
+<h3>Setting up your web app</h3>
+<p>
+	First, download the distribution and extract <tt>stapler.jar</tt> out of it. Then put this jar into your application's <tt>WEB-INF/lib</tt> directory. Then put the following XML into your <tt>WEB-INF/web.xml</tt> so that the stapler will be recognized by the container.
+<pre class=code><xmp
+><servlet>
+  <servlet-name>Stapler</servlet-name>
+  <servlet-class>org.kohsuke.stapler.Stapler</servlet-class>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>Stapler</servlet-name>
+  <url-pattern>/</url-pattern>
+</servlet-mapping>
+</xmp></pre>
+
+
+
+<h3>Registering the root object</h3>
+<p>
+	Stapler needs to know the root object of your application. It does that by <tt>SerlvetContext.getAttribute("app")</tt>, so your application needs to set the root object into a ServletContext. The easiest to do that is to write a <a href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletContextListener.html"><tt>ServletContextListener</tt></a>.
+<p>
+	Specifically, you write the following class:
+<pre class=code><xmp
+>package org.acme.foo;
+
+public class WebAppMain implements ServletContextListener {
+    /**
+     * Creates the root of your application and sets it to Stapler.
+     */
+    public void contextInitialized(ServletContextEvent event) {
+        // create a new instance of my application. change this line to fit your web app.
+        MyApplication app = new MyApplication();
+        
+        event.getServletContext().setAttribute("app",app);
+    }
+    
+    public void contextDestroyed(ServletContextEvent event) {
+    }
+}
+</xmp></pre>
+<p>
+	You also have to put the following XML in <tt>WEB-INF/web.xml</tt> so that the container recognizes this class.
+<pre class=code><xmp
+><listener>
+  <listener-class>org.acme.foo.WebAppMain</listener-class>
+</listener>
+</xmp></pre>
+<p>
+	In this way, the <tt>WebAppMain.contextInitialized</tt> method is executed as soon as the web app starts, and you get a chance to initialize your web application.
+
+
+
+<h3>Write Your Application</h3>
+<p>
+	The set up is all done. The rest is writing your application. In this tutorial, we are going to write a very simple application .... <b>TBD</b>.
+<p>
+	Think about a little application that demonstrates recursive, action methods, side files, and simple getters.
+
+
+</body>
+</html>

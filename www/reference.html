@@ -59,9 +59,16 @@
 
 <h3>Action Method</h3>
 <p>
-	If the URL is of the form "/xxxx/...." and the current object has a public "action" method named "doXxxx(StaplerRequest,HttpServletResponse)", then this method is invoked.
+	If the URL is of the form "/xxxx/...." and the current object has a public "action" method named "doXxxx(StaplerRequest,StaplerResponse)", then this method is invoked.
 <p>
 	The action method is expected to serve the request, and once it returns normally, Stapler finishes processing the request.
+
+
+
+<h3>Array</h3>
+<p>
+	If the current object is an array and the URL is "/nnnn/...." where nnnn is a number, then the object returned from <tt>currentObject[nnnn]</tt> will be evaluated against the rest of the URL "/...." recursively.
+
 
 
 <h3>List</h3>
@@ -124,4 +131,4 @@
   My name is ${it.name}
 &lt;/body>&lt;/html></pre>
 <p>
-	The HttpServletRequest object visible from the JSP is actually a StaplerRequest object, so you can access all the properties defined on it, too.
+	The request object visible from the JSP is actually a StaplerRequest object, so you can access all the properties defined on it. The same apply to the response object, too.

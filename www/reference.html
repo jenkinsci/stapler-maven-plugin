@@ -119,10 +119,9 @@
 	JSPs can be also placed as side files, although when you refer to them, you can't use the .jsp extension. (See the JSP sub-section above) When side-file JSP is executed, the request-scope variable "it" is set to the object for which the side file is invoked.
 <p>
 	For example, if your JSP looks like the following, then it prints the name property of the current object.
-<pre class=code><xmp
-><html><body>
+<pre class=code
+>&lt;html>&lt;body>
   My name is ${it.name}
-</body></html>
-</xmp></pre>
+&lt;/body>&lt;/html></pre>
 <p>
 	The HttpServletRequest object visible from the JSP is actually a StaplerRequest object, so you can access all the properties defined on it, too.

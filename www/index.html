@@ -1,29 +1,15 @@
 <html>
 <head>
-	<title>Project Home Page</title>
+	<title>Stapler Project</title>
 </head>
 <body>
-<p>
-	Servlet (and technologies like JSP/JSF that builds on top of it) can only bind request URLs into your static resources, JSPs, and/or servlets in a very limited way. You can even tell that from the java.net system. For example, the URL to view the archive of a mailing list is <tt>https://jaxb.dev.java.net/servlets/SummarizeList?listName=announce</tt>, the URL to search the archive if <tt>https://jaxb.dev.java.net/servlets/SearchList?listName=announce</tt>, and the URL to manage it is <tt>https://jaxb.dev.java.net/servlets/MailingListEdit?list=announce</tt>.
-<p>
-	As you see, it is almost "procedual" --- operation names form the URL, and then the object to work with is given as a parameter. This has some problems.
-<ol>
-	<li>It prevents you from using the URL hierarchy to its original purpose of organizing your application.
-	<li>It makes your code procedual. All those servlets need to first identify your internal "MailingList" object first, by parsing the URL. This is even harder for JSPs. This is tedious and error-prone.
-	<li>It makes relative URLs less useful, because most of the time whenever you generate a hyperlink, you have to do that by something like <tt>/servlets/MailingListEdit?list=<b>${listName}</b>&project=<b>${projectName}</b></tt>
-</ol>
-<p>
-	The Stapler project considers that these problems are caused by a lack of intuitive bindings between URLs and servlets/JSPs. To solve this problem, Stapler binds URLs to your model objects directly, invoking methods or JSPs for that object.
-<p>
-	The following list describes this process in more details:
-
-<ol>
-	<li>Your web application installs the Stapler servlet as the default servlet, and it will take over the way requests are mapped to servlets/JSPS/resources.
-	<li>You write model objects to represent your web application. For example, in the java.net system example, you'll write a <tt>JavaNet</tt> class for the root, <tt>Project</tt> class, then <tt>MailingList</tt> class.
-	<li>Your web application registers the root object (the sole instance of <tt>JavaNet</tt>) to the Stapler at start-up.
-	<li>Stapler maps the incoming URLs to one of your model objects. For example, if the URL is <tt>/project/jaxb/mailingList/foo/archive</tt>, then <tt>app.getProject("jaxb").getMailingList().get("foo").doArchive(request,response)</tt> (depending on your object model) is evaluated and this method will process the request.
-	<li>JSPs and static resources are served in a similar fashion.
-</ol>
+<ul>
+	<li><a href="what-is.html">
+		What is Stapler?
+	</a></li>
+	<li><a href="getting-started.html">
+		Getting Started
+	</a></li>
+</ul>
 </body>
 </html>
-

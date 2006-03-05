@@ -3,7 +3,7 @@
 	<title>Reference</title>
 	<link rel="stylesheet" type="text/css" href="stapler.css" />
 </head>
-<body>
+<body><div class=app>
 
 
 
@@ -89,6 +89,20 @@
 
 
 
+<h3>Dynamic Action Method</h3>
+<p>
+	If the current object has a public "action" method <tt>doDynamic(StaplerRequest,StaplerResponse)</tt>, then this method is invoked. From within this method, the rest of the URL can be acessed by <tt>StaplerRequest.getRestOfPath()</tt>.
+<p>
+	The action method is expected to serve the request, and once it returns normally, Stapler finishes processing the request.
+
+
+
+<h3>Dynamic Getter Method</h3>
+<p>
+	If the current object has a public method <tt>getDynamic(String,StaplerRequest,StaplerResponse)</tt>, and the URL is "/xxxx/..." and then this method is invoked with "xxxx" as the first parameter. The object returned from this method will be evaluated against the rest of the URL "/...." recursively.
+
+
+
 <h3>If None of the Above Works</h3>
 <p>
 	... then the client receives 404 NOT FOUND error.
@@ -132,3 +146,7 @@
 &lt;/body>&lt;/html></pre>
 <p>
 	The request object visible from the JSP is actually a StaplerRequest object, so you can access all the properties defined on it. The same apply to the response object, too.
+
+</div>
+</body>
+</html>

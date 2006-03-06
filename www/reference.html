@@ -57,9 +57,18 @@
 	Stapler also looks for the public getter of the form "getXxxx(StaplerRequest,String)".
 
 
+
 <h3>Action Method</h3>
 <p>
-	If the URL is of the form "/xxxx/...." and the current object has a public "action" method named "doXxxx(StaplerRequest,StaplerResponse)", then this method is invoked.
+	If the URL is of the form "/xxxx/...." and the current object has a public "action" method named <tt>doXxxx(StaplerRequest,StaplerResponse)</tt>, then this method is invoked.
+<p>
+	The action method is expected to serve the request, and once it returns normally, Stapler finishes processing the request.
+
+
+
+<h3>Index Action Method</h3>
+<p>
+	If the URL is of the form "/" and the current object has a public "action" method named <tt>doIndex(StaplerRequest,StaplerResponse)</tt>, then this method is invoked.
 <p>
 	The action method is expected to serve the request, and once it returns normally, Stapler finishes processing the request.
 

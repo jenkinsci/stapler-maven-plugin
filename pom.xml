@@ -8,6 +8,12 @@
 
   <name>Maven Stapler plugin</name>
   <description>Maven2 plugin for developing stapler applications</description>
+  
+  <scm>
+    <connection>scm:cvs:pserver:guest@cvs.dev.java.net:/cvs:stapler/maven-stapler-plugin</connection>
+    <developerConnection>scm:cvs:pserver:kohsuke@cvs.dev.java.net:/cvs:stapler/maven-stapler-plugin</developerConnection>
+    <url>https://stapler.dev.java.net/source/browse/stapler/maven-stapler-plugin</url>
+  </scm>
 
   <build>
     <plugins>

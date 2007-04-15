@@ -10,7 +10,7 @@ import com.sun.mirror.declaration.MemberDeclaration;
 import com.sun.mirror.declaration.MethodDeclaration;
 import com.sun.mirror.declaration.TypeDeclaration;
 import com.sun.mirror.util.SimpleDeclarationVisitor;
-import org.kohsuke.stapler.export.Exposed;
+import org.kohsuke.stapler.export.Exported;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,10 +35,10 @@ import java.util.TreeSet;
  * 
  * @author Kohsuke Kawaguchi
  */
-public class ExposedBeanAnnotationProcessor implements AnnotationProcessor {
+public class ExportedBeanAnnotationProcessor implements AnnotationProcessor {
     private final AnnotationProcessorEnvironment env;
 
-    public ExposedBeanAnnotationProcessor(AnnotationProcessorEnvironment env) {
+    public ExportedBeanAnnotationProcessor(AnnotationProcessorEnvironment env) {
         this.env = env;
     }
 
@@ -47,7 +47,7 @@ public class ExposedBeanAnnotationProcessor implements AnnotationProcessor {
             File out = new File(env.getOptions().get("-d"));
 
             AnnotationTypeDeclaration $exposed =
-                (AnnotationTypeDeclaration) env.getTypeDeclaration(Exposed.class.getName());
+                (AnnotationTypeDeclaration) env.getTypeDeclaration(Exported.class.getName());
 
             // collect all exposed properties
             Map<TypeDeclaration, List<MemberDeclaration>> props =

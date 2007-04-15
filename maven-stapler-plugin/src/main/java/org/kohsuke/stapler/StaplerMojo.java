@@ -22,6 +22,7 @@ import java.util.Properties;
  * @author Kohsuke Kawaguchi
  * @goal stapler
  * @phase generate-resources
+ * @deprecated replaced by the apt mojo.
  */
 public class StaplerMojo extends AbstractMojo {
 

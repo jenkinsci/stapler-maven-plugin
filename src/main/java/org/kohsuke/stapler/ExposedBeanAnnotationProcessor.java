@@ -2,6 +2,7 @@ package org.kohsuke.stapler;
 
 import com.sun.mirror.apt.AnnotationProcessor;
 import com.sun.mirror.apt.AnnotationProcessorEnvironment;
+import com.sun.mirror.apt.Filer.Location;
 import com.sun.mirror.declaration.AnnotationTypeDeclaration;
 import com.sun.mirror.declaration.Declaration;
 import com.sun.mirror.declaration.FieldDeclaration;
@@ -12,7 +13,6 @@ import com.sun.mirror.util.SimpleDeclarationVisitor;
 import org.kohsuke.stapler.export.Exposed;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -109,10 +109,9 @@ public class ExposedBeanAnnotationProcessor implements AnnotationProcessor {
             }
 
             try {
-                File javadocFile = new File(out, e.getKey().getQualifiedName().replace('.', '/') + ".javadoc");
-                javadocFile.getParentFile().mkdirs();
+                File javadocFile = new File(e.getKey().getQualifiedName().replace('.', '/') + ".javadoc");
                 env.getMessager().printNotice("Generating "+javadocFile);
-                OutputStream os = new FileOutputStream(javadocFile);
+                OutputStream os = env.getFiler().createBinaryFile(Location.CLASS_TREE,"", javadocFile);
                 try {
                     javadocs.store(os,null);
                 } finally {

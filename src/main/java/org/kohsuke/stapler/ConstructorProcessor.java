@@ -2,13 +2,13 @@ package org.kohsuke.stapler;
 
 import com.sun.mirror.apt.AnnotationProcessor;
 import com.sun.mirror.apt.AnnotationProcessorEnvironment;
+import com.sun.mirror.apt.Filer.Location;
 import com.sun.mirror.declaration.ClassDeclaration;
 import com.sun.mirror.declaration.ConstructorDeclaration;
 import com.sun.mirror.declaration.ParameterDeclaration;
 import com.sun.mirror.declaration.TypeDeclaration;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
@@ -52,12 +52,9 @@ public class ConstructorProcessor implements AnnotationProcessor {
             buf.append(p.getSimpleName());
         }
 
-        File out = new File(env.getOptions().get("-d"));
-
-        File dst = new File(out,c.getDeclaringType().getQualifiedName().replace('.',File.separatorChar)+".stapler");
-        dst.getParentFile().mkdirs();
-
-        OutputStream os = new FileOutputStream(dst);
+        File f = new File(c.getDeclaringType().getQualifiedName().replace('.', '/') + ".stapler");
+        env.getMessager().printNotice("Generating "+f);
+        OutputStream os = env.getFiler().createBinaryFile(Location.CLASS_TREE,"", f);
 
         Properties p = new Properties();
         p.put("constructor",buf.toString());

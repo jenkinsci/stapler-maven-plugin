@@ -58,10 +58,14 @@ public class ExposedBeanAnnotationProcessor implements AnnotationProcessor {
             for (MemberDeclaration md : e.getValue()) {
                 md.accept(new SimpleDeclarationVisitor() {
                     public void visitFieldDeclaration(FieldDeclaration f) {
-                        javadocs.put(f.getSimpleName(),f.getDocComment());
+                        String javadoc = f.getDocComment();
+                        if(javadoc!=null)
+                            javadocs.put(f.getSimpleName(), javadoc);
                     }
                     public void visitMethodDeclaration(MethodDeclaration m) {
-                        javadocs.put(m.getSimpleName()+"()",m.getDocComment());
+                        String javadoc = m.getDocComment();
+                        if(javadoc!=null)
+                            javadocs.put(m.getSimpleName()+"()", javadoc);
                     }
 
                     // way too tedious.

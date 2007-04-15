@@ -15,12 +15,20 @@ import org.kohsuke.stapler.export.Exposed;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.FileInputStream;
+import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Handles 'ExposedBean' and 'Exposed' annotations.
@@ -35,80 +43,92 @@ public class ExposedBeanAnnotationProcessor implements AnnotationProcessor {
     }
 
     public void process() {
-        File out = new File(env.getOptions().get("-d"));
+        try {
+            File out = new File(env.getOptions().get("-d"));
 
-        AnnotationTypeDeclaration $exposed =
-            (AnnotationTypeDeclaration) env.getTypeDeclaration(Exposed.class.getName());
+            AnnotationTypeDeclaration $exposed =
+                (AnnotationTypeDeclaration) env.getTypeDeclaration(Exposed.class.getName());
 
-        // collect all exposed properties
-        Map<TypeDeclaration, List<MemberDeclaration>> props =
-            new HashMap<TypeDeclaration, List<MemberDeclaration>>();
+            // collect all exposed properties
+            Map<TypeDeclaration, List<MemberDeclaration>> props =
+                new HashMap<TypeDeclaration, List<MemberDeclaration>>();
 
-        for( Declaration d : env.getDeclarationsAnnotatedWith($exposed)) {
-            MemberDeclaration md = (MemberDeclaration) d;
-            TypeDeclaration owner = md.getDeclaringType();
-            List<MemberDeclaration> list = props.get(owner);
-            if(list==null)
-                props.put(owner,list=new ArrayList<MemberDeclaration>());
-            list.add(md);
-        }
-
-        for (Entry<TypeDeclaration, List<MemberDeclaration>> e : props.entrySet()) {
-            final Properties javadocs = new Properties();
-            for (MemberDeclaration md : e.getValue()) {
-                md.accept(new SimpleDeclarationVisitor() {
-                    public void visitFieldDeclaration(FieldDeclaration f) {
-                        String javadoc = f.getDocComment();
-                        if(javadoc!=null)
-                            javadocs.put(f.getSimpleName(), javadoc);
-                    }
-                    public void visitMethodDeclaration(MethodDeclaration m) {
-                        String javadoc = m.getDocComment();
-                        if(javadoc!=null)
-                            javadocs.put(m.getSimpleName()+"()", javadoc);
-                    }
-
-                    // way too tedious.
-                    //private String getSignature(MethodDeclaration m) {
-                    //    final StringBuilder buf = new StringBuilder(m.getSimpleName());
-                    //    buf.append('(');
-                    //    boolean first=true;
-                    //    for (ParameterDeclaration p : m.getParameters()) {
-                    //        if(first)   first = false;
-                    //        else        buf.append(',');
-                    //        p.getType().accept(new SimpleTypeVisitor() {
-                    //            public void visitPrimitiveType(PrimitiveType pt) {
-                    //                buf.append(pt.getKind().toString().toLowerCase());
-                    //            }
-                    //            public void visitDeclaredType(DeclaredType dt) {
-                    //                buf.append(dt.getDeclaration().getQualifiedName());
-                    //            }
-                    //
-                    //            public void visitArrayType(ArrayType at) {
-                    //                at.getComponentType().accept(this);
-                    //                buf.append("[]");
-                    //            }
-                    //
-                    //            public void visitTypeVariable(TypeVariable tv) {
-                    //
-                    //                // TODO
-                    //                super.visitTypeVariable(typeVariable);
-                    //            }
-                    //
-                    //            public void visitVoidType(VoidType voidType) {
-                    //                // TODO
-                    //                super.visitVoidType(voidType);
-                    //            }
-                    //        });
-                    //    }
-                    //    buf.append(')');
-                    //    // TODO
-                    //    return null;
-                    //}
-                });
+            for( Declaration d : env.getDeclarationsAnnotatedWith($exposed)) {
+                MemberDeclaration md = (MemberDeclaration) d;
+                TypeDeclaration owner = md.getDeclaringType();
+                List<MemberDeclaration> list = props.get(owner);
+                if(list==null)
+                    props.put(owner,list=new ArrayList<MemberDeclaration>());
+                list.add(md);
             }
 
-            try {
+            File beans = new File(out,"META-INF/exposed.beans");
+            Set<String> exposedBeanNames = new TreeSet<String>();
+            if(beans.exists()) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(beans)));
+                String line;
+                while((line=in.readLine())!=null)
+                    exposedBeanNames.add(line.trim());
+                in.close();
+            }
+
+            for (Entry<TypeDeclaration, List<MemberDeclaration>> e : props.entrySet()) {
+                exposedBeanNames.add(e.getKey().getQualifiedName());
+
+                final Properties javadocs = new Properties();
+                for (MemberDeclaration md : e.getValue()) {
+                    md.accept(new SimpleDeclarationVisitor() {
+                        public void visitFieldDeclaration(FieldDeclaration f) {
+                            String javadoc = f.getDocComment();
+                            if(javadoc!=null)
+                                javadocs.put(f.getSimpleName(), javadoc);
+                        }
+                        public void visitMethodDeclaration(MethodDeclaration m) {
+                            String javadoc = m.getDocComment();
+                            if(javadoc!=null)
+                                javadocs.put(m.getSimpleName()+"()", javadoc);
+                        }
+
+                        // way too tedious.
+                        //private String getSignature(MethodDeclaration m) {
+                        //    final StringBuilder buf = new StringBuilder(m.getSimpleName());
+                        //    buf.append('(');
+                        //    boolean first=true;
+                        //    for (ParameterDeclaration p : m.getParameters()) {
+                        //        if(first)   first = false;
+                        //        else        buf.append(',');
+                        //        p.getType().accept(new SimpleTypeVisitor() {
+                        //            public void visitPrimitiveType(PrimitiveType pt) {
+                        //                buf.append(pt.getKind().toString().toLowerCase());
+                        //            }
+                        //            public void visitDeclaredType(DeclaredType dt) {
+                        //                buf.append(dt.getDeclaration().getQualifiedName());
+                        //            }
+                        //
+                        //            public void visitArrayType(ArrayType at) {
+                        //                at.getComponentType().accept(this);
+                        //                buf.append("[]");
+                        //            }
+                        //
+                        //            public void visitTypeVariable(TypeVariable tv) {
+                        //
+                        //                // TODO
+                        //                super.visitTypeVariable(typeVariable);
+                        //            }
+                        //
+                        //            public void visitVoidType(VoidType voidType) {
+                        //                // TODO
+                        //                super.visitVoidType(voidType);
+                        //            }
+                        //        });
+                        //    }
+                        //    buf.append(')');
+                        //    // TODO
+                        //    return null;
+                        //}
+                    });
+                }
+
                 File javadocFile = new File(e.getKey().getQualifiedName().replace('.', '/') + ".javadoc");
                 env.getMessager().printNotice("Generating "+javadocFile);
                 OutputStream os = env.getFiler().createBinaryFile(Location.CLASS_TREE,"", javadocFile);
@@ -117,9 +137,16 @@ public class ExposedBeanAnnotationProcessor implements AnnotationProcessor {
                 } finally {
                     os.close();
                 }
-            } catch (IOException x) {
-                env.getMessager().printError(x.toString());
             }
+
+            beans.getParentFile().mkdirs();
+            PrintWriter w = new PrintWriter(new OutputStreamWriter(new FileOutputStream(beans),"UTF-8"));
+            for (String beanName : exposedBeanNames)
+                w.println(beanName);
+            w.close();
+
+        } catch (IOException x) {
+            env.getMessager().printError(x.toString());
         }
     }
 }

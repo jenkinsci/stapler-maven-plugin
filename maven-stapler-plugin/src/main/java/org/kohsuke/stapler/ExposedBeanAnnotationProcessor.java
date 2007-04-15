@@ -110,9 +110,9 @@ public class ExposedBeanAnnotationProcessor implements AnnotationProcessor {
 
             try {
                 File javadocFile = new File(out, e.getKey().getQualifiedName().replace('.', '/') + ".javadoc");
+                javadocFile.getParentFile().mkdirs();
                 env.getMessager().printNotice("Generating "+javadocFile);
-                OutputStream os = new FileOutputStream(
-                    javadocFile);
+                OutputStream os = new FileOutputStream(javadocFile);
                 try {
                     javadocs.store(os,null);
                 } finally {

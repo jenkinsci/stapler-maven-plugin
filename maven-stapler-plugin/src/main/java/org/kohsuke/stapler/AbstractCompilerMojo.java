@@ -17,6 +17,9 @@ package org.kohsuke.stapler;
  * limitations under the License.
  */
 
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.CompilationFailureException;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.compiler.Compiler;
 import org.codehaus.plexus.compiler.CompilerConfiguration;
 import org.codehaus.plexus.compiler.CompilerError;
@@ -30,9 +33,6 @@ import org.codehaus.plexus.compiler.util.scan.mapping.SingleTargetSourceMapping;
 import org.codehaus.plexus.compiler.util.scan.mapping.SourceMapping;
 import org.codehaus.plexus.compiler.util.scan.mapping.SuffixMapping;
 import org.codehaus.plexus.util.StringUtils;
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.CompilationFailureException;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ import java.util.Set;
  *
  * @author others
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: AbstractCompilerMojo.java 279 2007-04-15 03:42:02Z kohsuke $
+ * @version $Id: AbstractCompilerMojo.java 383 2007-08-19 17:12:03Z kohsuke $
  */
 public abstract class AbstractCompilerMojo
     extends AbstractMojo {

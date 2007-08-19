@@ -18,8 +18,8 @@ package org.kohsuke.stapler;
  */
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.CompilationFailureException;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.compiler.util.scan.SimpleSourceInclusionScanner;
 import org.codehaus.plexus.compiler.util.scan.SourceInclusionScanner;
 import org.codehaus.plexus.compiler.util.scan.StaleSourceScanner;
@@ -34,7 +34,7 @@ import java.util.Set;
  * Compiles application sources
  *
  * @author <a href="mailto:jason@maven.org">Jason van Zyl </a>
- * @version $Id: CompilerMojo.java 279 2007-04-15 03:42:02Z kohsuke $
+ * @version $Id: CompilerMojo.java 383 2007-08-19 17:12:03Z kohsuke $
  * @phase compile
  * @requiresDependencyResolution compile
  */

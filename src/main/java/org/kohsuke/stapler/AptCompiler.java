@@ -3,9 +3,18 @@ package org.kohsuke.stapler;
 import org.codehaus.plexus.compiler.javac.JavacCompiler;
 import org.codehaus.plexus.compiler.CompilerConfiguration;
 import org.codehaus.plexus.compiler.CompilerException;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.settings.Settings;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.lifecycle.LifecycleExecutionException;
+import org.apache.maven.plugin.PluginNotFoundException;
+import org.apache.maven.plugin.PluginManagerException;
+import org.apache.maven.model.Plugin;
 
 import java.util.List;
 import java.util.Collections;
+import java.util.Iterator;
 import java.io.File;
 import java.io.PrintWriter;
 
@@ -60,7 +69,7 @@ public class AptCompiler extends JavacCompiler {
      */
     protected List compileInProcess( String[] args ) throws CompilerException {
         com.sun.tools.apt.Main aptTool = new com.sun.tools.apt.Main();
-        int r = aptTool.process(new AnnotationProcessorFactoryImpl(),
+        int r = aptTool.process(new AnnotationProcessorFactoryImpl(AptMojo.compilerArgs.get()),
             new PrintWriter(System.out,true),args);
         if(r!=0)
             throw new CompilerException("APT failed: "+r);

@@ -9,19 +9,11 @@ import com.sun.mirror.declaration.AnnotationTypeDeclaration;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * @author Kohsuke Kawaguchi
  */
-final class AnnotationProcessorFactoryImpl implements AnnotationProcessorFactory {
-    private List<AnnotationProcessorFactory> factories;
-
-    public AnnotationProcessorFactoryImpl(List<AnnotationProcessorFactory> factories) {
-        this.factories = factories;
-    }
-
+public final class AnnotationProcessorFactoryImpl implements AnnotationProcessorFactory {
     public Collection<String> supportedOptions() {
         return Collections.emptyList();
     }
@@ -31,13 +23,9 @@ final class AnnotationProcessorFactoryImpl implements AnnotationProcessorFactory
     }
 
     public AnnotationProcessor getProcessorFor(Set<AnnotationTypeDeclaration> set, AnnotationProcessorEnvironment env) {
-        List<AnnotationProcessor> processors = new ArrayList<AnnotationProcessor>();
-        processors.add(new ExportedBeanAnnotationProcessor(env));
-        processors.add(new ConstructorProcessor(env));
-
-        for (AnnotationProcessorFactory f : factories)
-            processors.add(f.getProcessorFor(set,env));
-
-        return AnnotationProcessors.getCompositeAnnotationProcessor(processors);
+        return AnnotationProcessors.getCompositeAnnotationProcessor(
+            new ExportedBeanAnnotationProcessor(env),
+            new ConstructorProcessor(env)
+        );
     }
 }

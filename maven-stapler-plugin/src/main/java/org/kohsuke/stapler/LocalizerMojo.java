@@ -209,9 +209,9 @@ public class LocalizerMojo extends AbstractMojo {
                  * and list up property names.
                  */
                 private void findExpressions() throws SAXParseException {
-                    int idx=0;
+                    int idx=-1;
                     do {
-                        idx = buf.indexOf("${%",idx);
+                        idx = buf.indexOf("${%",idx+1);
                         if(idx<0)   break;
 
                         int end = buf.indexOf("}",idx);

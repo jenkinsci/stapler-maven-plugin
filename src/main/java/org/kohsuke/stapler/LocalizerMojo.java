@@ -123,6 +123,11 @@ public class LocalizerMojo extends AbstractMojo {
             }
         }
 
+        if(props.isEmpty())
+            return; // no change to make
+
+        getLog().info("Updating "+resourceFile);
+
         try {
             // then add them to the end
             RandomAccessFile f = new RandomAccessFile(resourceFile,"rw");
@@ -200,13 +205,13 @@ public class LocalizerMojo extends AbstractMojo {
                 }
 
                 /**
-                 * Find property references of the form "${#xxx(...)}" from {@link #buf}
+                 * Find property references of the form "${%xxx(...)}" from {@link #buf}
                  * and list up property names.
                  */
                 private void findExpressions() throws SAXParseException {
                     int idx=0;
                     do {
-                        idx = buf.indexOf("${#",idx);
+                        idx = buf.indexOf("${%",idx);
                         if(idx<0)   break;
 
                         int end = buf.indexOf("}",idx);

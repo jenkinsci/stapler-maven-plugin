@@ -194,6 +194,10 @@ public class LocalizerMojo extends AbstractMojo {
 
                 public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
                     findExpressions();
+                    for( int i=0; i<attributes.getLength(); i++ ) {
+                        buf.append(attributes.getValue(i));
+                        findExpressions();
+                    }
                 }
 
                 public void endElement(String uri, String localName, String qName) throws SAXException {

@@ -4,6 +4,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.model.Resource;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -57,8 +58,8 @@ public class LocalizerMojo extends AbstractMojo {
             throw new Error(e); // impossible
         }
 
-        for( String path : (List<String>)project.getCompileSourceRoots() ) {
-            File dir = new File(path);
+        for( Resource res : (List<Resource>)project.getResources() ) {
+            File dir = new File(res.getDirectory());
             processDirectory(dir);
         }
     }

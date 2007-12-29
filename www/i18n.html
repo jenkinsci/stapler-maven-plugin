@@ -10,14 +10,19 @@
 
 <h2>i18n from Jelly view scripts</h2>
 <p>
-    For Jelly view scripts, the convention is to place localized message property files by using
+    For Jelly view scripts, the convention is to place localized message resource files by using
     the same base name. For example, if you are writing <tt>foo.jelly</tt>, its property files will
     be placed in files like <tt>foo.properties</tt> and <tt>foo_ja.properties</tt>.
 <p>
-    In this set up, Jelly view scripts can refer to property by using a special expression of the form
+    In this set up, Jelly view scripts can refer to message resources by using a special expression of the form
     <tt>${%KEY(arg1,arg2,...)}</tt>. The messages are formatted by using <tt>MessageFormat</tt>, and
     arguments are individually parsed as JEXL scripts. If there's no arguments, parenthesis can be
-    omitted and thus it can be simply written as <tt>%{%KEY}</tt>.
+    omitted and thus it can be simply written as <tt>${%KEY}</tt>.
+
+<p>
+    If you need to refer to message resources from within a JEXL expression, you can use a string literal
+    notation <tt>"%KEY(arg1,arg2,...)"</tt> or its argument-less short form <tt>"%KEY"</tt>. For example,
+    <tt>${obj.methodCall(1,true,"%Message")}</tt>
     
 <p>
     If the specified KEY is not available in the property files,

@@ -23,6 +23,8 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -215,23 +217,44 @@ public class LocalizerMojo extends AbstractMojo {
                 private void findExpressions() throws SAXParseException {
                     int idx=-1;
                     do {
-                        idx = buf.indexOf("${%",idx+1);
+                        idx = buf.indexOf("${",idx+1);
                         if(idx<0)   break;
 
                         int end = buf.indexOf("}",idx);
                         if(end==-1)
                             throw new SAXParseException("Missing '}'",locator);
 
-                        String exp = buf.substring(idx+3,end);
+                        onJexlExpression(buf.substring(idx+2,end));
+                    } while(true);
+
+                    buf.setLength(0);
+                }
+
+                /**
+                 * Found a JEXL expression.
+                 */
+                private void onJexlExpression(String exp) {
+                    if(exp.startsWith("%")) {
                         getLog().debug("Found "+exp);
+                        exp = exp.substring(1);
 
                         // if parameters follow, remove them
                         int op = exp.indexOf('(');
                         if(op>=0)   exp=exp.substring(0,op);
                         properties.add(exp);
-                    } while(true);
+                    } else {
+                        Matcher m = RESOURCE_LITERAL_STRING.matcher(exp);
+                        while(m.find()) {
+                            String literal = m.group();
+                            getLog().debug("Found "+literal);
+                            literal = literal.substring(2,literal.length()-1); // unquote and remove '%'
 
-                    buf.setLength(0);
+                            // if parameters follow, remove them
+                            int op = literal.indexOf('(');
+                            if(op>=0)   literal=literal.substring(0,op);
+                            properties.add(literal);
+                        }
+                    }
                 }
             });
 
@@ -244,4 +267,7 @@ public class LocalizerMojo extends AbstractMojo {
     }
 
     SAXParser parser;
+
+    // "%...."    string literal that starts with '%'
+    private static final Pattern RESOURCE_LITERAL_STRING = Pattern.compile("(\"%[^\"]+\")|('%[^']+')");
 }

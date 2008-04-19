@@ -27,6 +27,8 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 /**
+ * Alias for <tt>stapler:l10n</tt> mojo. Left for compatibility.
+ *
  * @author Kohsuke Kawaguchi
  * @goal i18n
  */

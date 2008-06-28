@@ -34,8 +34,7 @@ import java.util.Set;
  * Compiles application test sources
  *
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id: TestCompilerMojo.java 669 2008-06-28 00:28:12Z kohsuke $
- * @goal testCompile
+ * @version $Id: TestCompilerMojo.java 670 2008-06-28 00:28:29Z kohsuke $
  * @phase test-compile
  * @requiresDependencyResolution test
  */

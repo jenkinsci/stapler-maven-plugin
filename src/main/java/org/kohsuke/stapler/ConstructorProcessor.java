@@ -14,6 +14,8 @@ import java.io.OutputStream;
 import java.util.Properties;
 
 /**
+ * Handles {@link DataBoundConstructor} annotation and captures parameter names.
+ * 
  * @author Kohsuke Kawaguchi
  */
 public class ConstructorProcessor implements AnnotationProcessor {

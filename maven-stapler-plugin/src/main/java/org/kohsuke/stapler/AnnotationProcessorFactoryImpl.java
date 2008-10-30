@@ -25,7 +25,8 @@ public final class AnnotationProcessorFactoryImpl implements AnnotationProcessor
     public AnnotationProcessor getProcessorFor(Set<AnnotationTypeDeclaration> set, AnnotationProcessorEnvironment env) {
         return AnnotationProcessors.getCompositeAnnotationProcessor(
             new ExportedBeanAnnotationProcessor(env),
-            new ConstructorProcessor(env)
+            new ConstructorProcessor(env),
+            new QueryParameterAnnotationProcessor(env)
         );
     }
 }

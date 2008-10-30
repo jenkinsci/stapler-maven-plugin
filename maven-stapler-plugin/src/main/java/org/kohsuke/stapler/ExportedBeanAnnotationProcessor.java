@@ -11,6 +11,7 @@ import com.sun.mirror.declaration.MethodDeclaration;
 import com.sun.mirror.declaration.TypeDeclaration;
 import com.sun.mirror.util.SimpleDeclarationVisitor;
 import org.kohsuke.stapler.export.Exported;
+import org.kohsuke.stapler.export.ExportedBean;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,7 +32,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Handles 'ExposedBean' and 'Exposed' annotations.
+ * Handles {@link ExportedBean} and {@link Exported} annotations.
  * 
  * @author Kohsuke Kawaguchi
  */

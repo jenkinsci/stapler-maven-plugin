@@ -27,6 +27,9 @@ public class L10nProgress {
 
     private final List<HudsonMessages> messages = new ArrayList<HudsonMessages>();
 
+    /**
+     * Information per directory.
+     */
     public final class HudsonMessages {
         private final File dir;
         private final Map<String, Integer> map = new HashMap<String, Integer>();
@@ -39,7 +42,7 @@ public class L10nProgress {
             return dir.getName();
         }
 
-        public void setCnt(final String locale, final int cnt) {
+        private void setCnt(final String locale, final int cnt) {
             map.put(locale, cnt);
         }
 
@@ -54,6 +57,33 @@ public class L10nProgress {
         public int ratio(String locale) {
             return (int) (((double) getCnt(locale) / getCnt("")) * 100);
         }
+
+        /**
+         * Dumps this object as a row in the Hatena diary format.
+         */
+        public void toHatena(StringBuilder b) {
+            b.append("|").append(getDirectoryName()).append("(").append(getCnt("")).append(") |");
+            for (final String locale : locales) {
+                b.append(getCnt(locale)).append("(").append(ratio(locale)).append("%)|");
+            }
+            b.append("\n");
+        }
+    }
+
+    /**
+     * Gets the pseudo {@link HudsonMessages} that represents the sum of all {@link #messages}.
+     */
+    public HudsonMessages getTotal() {
+        HudsonMessages sum = new HudsonMessages(new File("total"));
+        ArrayList<String> localesPlusOne = new ArrayList<String>(locales);
+        localesPlusOne.add("");
+        for (String locale : localesPlusOne) {
+            int cnt=0;
+            for (HudsonMessages m : messages)
+                cnt += m.getCnt(locale);
+            sum.setCnt(locale,cnt);
+        }
+        return sum;
     }
 
     /**
@@ -83,13 +113,9 @@ public class L10nProgress {
         }
         b.append("\n");
 
-        for (final HudsonMessages m : messages) {
-            b.append("|").append(m.getDirectoryName()).append("(").append(m.getCnt("")).append(") |");
-            for (final String locale : locales) {
-                b.append(m.getCnt(locale)).append("(").append(m.ratio(locale)).append("%)|");
-            }
-            b.append("\n");
-        }
+        for (final HudsonMessages m : messages)
+            m.toHatena(b);
+        getTotal().toHatena(b);
         return b.toString();
     }
 

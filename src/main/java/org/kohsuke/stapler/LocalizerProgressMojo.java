@@ -29,7 +29,7 @@ public class LocalizerProgressMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         L10nProgress r = new L10nProgress();
         for( Resource root : (Collection<Resource>)project.getResources() ) {
-            r.parse(new File(root.getDirectory()));
+            r.parseRecursively(new File(root.getDirectory()));
         }
         System.out.println(r.toHatena());
     }

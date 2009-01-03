@@ -1,0 +1,87 @@
+<component-set>
+  <components>
+
+    <!-- custom life cycle for stapler-jar -->
+    <component>
+      <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+      <role-hint>stapler-jar</role-hint>
+      <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+      <configuration>
+        <lifecycles>
+          <lifecycle>
+            <id>default</id>
+            <phases>
+              <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources</process-resources>
+              <!-- use a custom compiler for all stapler annotations processing -->
+              <compile>org.kohsuke.stapler:maven-stapler-plugin:apt-compile</compile>
+              <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources</process-test-resources>
+              <test-compile>org.kohsuke.stapler:maven-stapler-plugin:apt-test-compile</test-compile>
+              <test>org.apache.maven.plugins:maven-surefire-plugin:test</test>
+              <package>org.apache.maven.plugins:maven-jar-plugin:jar</package>
+              <install>org.apache.maven.plugins:maven-install-plugin:install</install>
+              <deploy>org.apache.maven.plugins:maven-deploy-plugin:deploy</deploy>
+            </phases>
+          </lifecycle>
+        </lifecycles>
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+      <role-hint>stapler-war</role-hint>
+      <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+      <configuration>
+        <lifecycles>
+          <lifecycle>
+            <id>default</id>
+            <!-- START SNIPPET: war-lifecycle -->
+            <phases>
+              <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources</process-resources>
+              <!-- use a custom compiler for all stapler annotations processing -->
+              <compile>org.kohsuke.stapler:maven-stapler-plugin:apt-compile</compile>
+              <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources</process-test-resources>
+              <test-compile>org.kohsuke.stapler:maven-stapler-plugin:apt-test-compile</test-compile>
+              <test>org.apache.maven.plugins:maven-surefire-plugin:test</test>
+              <package>org.apache.maven.plugins:maven-war-plugin:war</package>
+              <install>org.apache.maven.plugins:maven-install-plugin:install</install>
+              <deploy>org.apache.maven.plugins:maven-deploy-plugin:deploy</deploy>
+            </phases>
+            <!-- END SNIPPET: war-lifecycle -->
+          </lifecycle>
+        </lifecycles>
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.apache.maven.artifact.handler.ArtifactHandler</role>
+      <role-hint>stapler-jar</role-hint>
+      <implementation>org.apache.maven.artifact.handler.DefaultArtifactHandler</implementation>
+      <configuration>
+        <extension>jar</extension>
+        <type>stapler-jar</type>
+        <packaging>stapler-jar</packaging>
+        <language>java</language>
+        <addedToClasspath>true</addedToClasspath>
+      </configuration>
+    </component>
+    <component>
+      <role>org.apache.maven.artifact.handler.ArtifactHandler</role>
+      <role-hint>stapler-war</role-hint>
+      <implementation>org.apache.maven.artifact.handler.DefaultArtifactHandler</implementation>
+      <configuration>
+        <extension>war</extension>
+        <type>stapler-war</type>
+        <packaging>stapler-war</packaging>
+        <language>java</language>
+        <addedToClasspath>false</addedToClasspath>
+      </configuration>
+    </component>
+
+    <component>
+      <role>org.codehaus.plexus.compiler.Compiler</role>
+      <role-hint>stapler-apt</role-hint>
+      <implementation>org.kohsuke.stapler.AptCompiler</implementation>
+      <description />
+    </component>
+  </components>
+</component-set>

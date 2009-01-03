@@ -22,6 +22,7 @@ import org.jvnet.maven.jellydoc.Attribute;
 import org.jvnet.maven.jellydoc.Library;
 import org.jvnet.maven.jellydoc.Tag;
 import org.jvnet.maven.jellydoc.Tags;
+import org.jvnet.maven.jellydoc.JellydocMojo;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -104,8 +105,20 @@ public class TaglibDocMojo extends AbstractMojo {
     private MavenProjectHelper helper;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
+        writeTaglibXml();
+
+        JellydocMojo jellydoc = new JellydocMojo();
+        jellydoc.factory = factory;
+        jellydoc.helper = helper;
+        jellydoc.localRepository = localRepository;
+        jellydoc.project = project;
+        jellydoc.resolver = resolver;
+        jellydoc.generateSchema();
+    }
+
+    private void writeTaglibXml() throws MojoExecutionException {
         try {
-            File taglibsXml = new File(project.getBasedir(), "target/taglibs.xml");
+            File taglibsXml = new File(project.getBasedir(), "target/taglib.xml");
             Tags tags = TXW.create(Tags.class,new StreamSerializer(new FileOutputStream(taglibsXml)));
             for(Resource res : (List<Resource>)project.getResources())
                 scanTagLibs(new File(res.getDirectory()),"",tags);

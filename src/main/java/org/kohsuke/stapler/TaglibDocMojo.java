@@ -15,25 +15,26 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 import org.apache.maven.reporting.MavenReport;
 import org.apache.maven.reporting.MavenReportException;
+import org.codehaus.doxia.sink.Sink;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.jvnet.maven.jellydoc.Attribute;
+import org.jvnet.maven.jellydoc.JellydocMojo;
 import org.jvnet.maven.jellydoc.Library;
 import org.jvnet.maven.jellydoc.Tag;
 import org.jvnet.maven.jellydoc.Tags;
-import org.jvnet.maven.jellydoc.JellydocMojo;
-import org.codehaus.doxia.sink.Sink;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -210,9 +211,14 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
             tag.name(name);
 
             DocumentFactory f = new DocumentFactory();
-            f.setXPathNamespaceURIs(Collections.singletonMap("s","jelly:stapler"));
+            f.setXPathNamespaceURIs(NAMESPACE_MAP);
             Document jelly = new SAXReader(f).read(tagFile);
             Element doc = (Element) jelly.selectSingleNode(".//s:documentation");
+
+            // does this tag have a body?
+            if(jelly.selectSingleNode("//d:invokeBody")==null)
+                tag.noContent(true);
+
             if(doc==null) {
                 tag.doc("");
             } else {
@@ -277,5 +283,11 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
 
     public boolean canGenerateReport() {
         return getJellydocMojo().canGenerateReport();
+    }
+
+    private static final Map<String,String> NAMESPACE_MAP = new HashMap<String, String>();
+    static {
+        NAMESPACE_MAP.put("s", "jelly:stapler");
+        NAMESPACE_MAP.put("d", "jelly:define");
     }
 }

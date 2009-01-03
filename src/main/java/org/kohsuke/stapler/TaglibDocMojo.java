@@ -13,6 +13,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
+import org.apache.maven.reporting.MavenReport;
+import org.apache.maven.reporting.MavenReportException;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentFactory;
@@ -23,6 +25,7 @@ import org.jvnet.maven.jellydoc.Library;
 import org.jvnet.maven.jellydoc.Tag;
 import org.jvnet.maven.jellydoc.Tags;
 import org.jvnet.maven.jellydoc.JellydocMojo;
+import org.codehaus.doxia.sink.Sink;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -30,18 +33,24 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
  * Scans Jelly tag libraries from tag files, and generate <tt>taglib.xml</tt>
  * compatible with <tt>maven-jellydoc-plugin</tt>
  *
+ * <p>
+ * For productive debugging of this mojo, run "mvn site:run" with debugger.
+ * Every request will trigger a whole rendering, and you can do hot-swap of
+ * byte code for changes. 
+ *
  * @author Kohsuke Kawaguchi
  * @goal jelly-taglibdoc
  * @phase generate-sources
  * @requiresDependencyResolution compile
  */
-public class TaglibDocMojo extends AbstractMojo {
+public class TaglibDocMojo extends AbstractMojo implements MavenReport {
     /**
      * The Maven Project Object
      *
@@ -104,16 +113,29 @@ public class TaglibDocMojo extends AbstractMojo {
      */
     private MavenProjectHelper helper;
 
+    private JellydocMojo jellydoc;
+
     public void execute() throws MojoExecutionException, MojoFailureException {
         writeTaglibXml();
 
-        JellydocMojo jellydoc = new JellydocMojo();
-        jellydoc.factory = factory;
-        jellydoc.helper = helper;
-        jellydoc.localRepository = localRepository;
-        jellydoc.project = project;
-        jellydoc.resolver = resolver;
-        jellydoc.generateSchema();
+        getJellydocMojo().generateSchema();
+    }
+
+    private JellydocMojo getJellydocMojo() {
+        if(jellydoc==null) {
+            jellydoc = new JellydocMojo() {
+                @Override
+                public void execute() throws MojoExecutionException, MojoFailureException {
+                    TaglibDocMojo.this.execute();
+                }
+            };
+            jellydoc.factory = factory;
+            jellydoc.helper = helper;
+            jellydoc.localRepository = localRepository;
+            jellydoc.project = project;
+            jellydoc.resolver = resolver;
+        }
+        return jellydoc;
     }
 
     private void writeTaglibXml() throws MojoExecutionException {
@@ -166,7 +188,7 @@ public class TaglibDocMojo extends AbstractMojo {
         lib.name(markerFile.get(0).toString());
         lib.prefix(uri.substring(uri.lastIndexOf('/')+1)).uri(uri);
         // doc
-        lib.doc()._pcdata(join(markerFile.subList(1,markerFile.size())));
+        lib.doc()._pcdata(join(markerFile));
 
         File[] tagFiles = dir.listFiles(new FileFilter() {
             public boolean accept(File f) {
@@ -192,7 +214,7 @@ public class TaglibDocMojo extends AbstractMojo {
             Document jelly = new SAXReader(f).read(tagFile);
             Element doc = (Element) jelly.selectSingleNode(".//s:documentation");
             if(doc==null) {
-                tag.doc("No documentation available");
+                tag.doc("");
             } else {
                 tag.doc(doc.getText());
                 for(Element attr : (List<Element>)doc.selectNodes("s:attribute")) {
@@ -209,7 +231,6 @@ public class TaglibDocMojo extends AbstractMojo {
         }
     }
 
-
     private String join(List list) {
         StringBuilder buf = new StringBuilder();
         for (Object item : list) {
@@ -217,5 +238,44 @@ public class TaglibDocMojo extends AbstractMojo {
             buf.append(item);
         }
         return buf.toString();
+    }
+
+//
+// MavenReport implementation
+//
+    public void generate(Sink sink, Locale locale) throws MavenReportException {
+        getJellydocMojo().generate(sink,locale);
+    }
+
+    public String getOutputName() {
+        return getJellydocMojo().getOutputName();
+    }
+
+    public String getName(Locale locale) {
+        return getJellydocMojo().getName(locale);
+    }
+
+    public String getCategoryName() {
+        return getJellydocMojo().getCategoryName();
+    }
+
+    public String getDescription(Locale locale) {
+        return getJellydocMojo().getDescription(locale);
+    }
+
+    public void setReportOutputDirectory(File outputDirectory) {
+        getJellydocMojo().setReportOutputDirectory(outputDirectory);
+    }
+
+    public File getReportOutputDirectory() {
+        return getJellydocMojo().getReportOutputDirectory();
+    }
+
+    public boolean isExternalReport() {
+        return getJellydocMojo().isExternalReport();
+    }
+
+    public boolean canGenerateReport() {
+        return getJellydocMojo().canGenerateReport();
     }
 }

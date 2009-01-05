@@ -142,6 +142,7 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
     private void writeTaglibXml() throws MojoExecutionException {
         try {
             File taglibsXml = new File(project.getBasedir(), "target/taglib.xml");
+            taglibsXml.getParentFile().mkdirs();
             Tags tags = TXW.create(Tags.class,new StreamSerializer(new FileOutputStream(taglibsXml)));
             for(Resource res : (List<Resource>)project.getResources())
                 scanTagLibs(new File(res.getDirectory()),"",tags);

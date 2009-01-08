@@ -119,7 +119,7 @@
     <dependency>
       <groupId>org.jvnet.maven-jellydoc-plugin</groupId>
       <artifactId>maven-jellydoc-plugin</artifactId>
-      <version>1.2</version>
+      <version>1.3</version>
     </dependency>
     <dependency>
       <groupId>jaxen</groupId>

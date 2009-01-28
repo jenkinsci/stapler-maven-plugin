@@ -63,7 +63,7 @@ public class ExportedBeanAnnotationProcessor implements AnnotationProcessor {
                 list.add(md);
             }
 
-            File beans = new File(out,"META-INF/exposed.beans");
+            File beans = new File(out,"META-INF/exposed.stapler-beans");
             Set<String> exposedBeanNames = new TreeSet<String>();
             if(beans.exists()) {
                 BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(beans)));

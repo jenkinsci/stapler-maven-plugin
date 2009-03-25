@@ -10,16 +10,16 @@
   <description>Maven2 plugin for developing stapler applications</description>
   
   <scm>
-    <connection>scm:cvs:pserver:guest@cvs.dev.java.net:/cvs:stapler/maven-stapler-plugin</connection>
-    <developerConnection>scm:cvs:pserver:kohsuke@cvs.dev.java.net:/cvs:stapler/maven-stapler-plugin</developerConnection>
-    <url>https://stapler.dev.java.net/source/browse/stapler/maven-stapler-plugin</url>
+    <connection>scm:svn:https://svn.dev.java.net/svn/stapler/trunk/maven-stapler-plugin</connection>
+    <developerConnection>scm:svn:https://svn.dev.java.net/svn/stapler/trunk/maven-stapler-plugin</developerConnection>
+    <url>https://stapler.dev.java.net/source/browse/stapler/trunk/maven-stapler-plugin/</url>
   </scm>
 
   <distributionManagement>
     <repository>
       <uniqueVersion>false</uniqueVersion>
       <id>java.net-maven2-repository</id>
-      <url>java-net:/maven2-repository/trunk/www/repository/</url>
+      <url>java-net:/maven2-repository/trunk/repository/</url>
     </repository>
   </distributionManagement>
 
@@ -51,7 +51,7 @@
       <extension>
         <groupId>org.jvnet.wagon-svn</groupId>
         <artifactId>wagon-svn</artifactId>
-        <version>1.6</version>
+        <version>1.9</version>
       </extension>
     </extensions>
   </build>

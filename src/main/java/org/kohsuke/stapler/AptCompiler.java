@@ -2,10 +2,19 @@ package org.kohsuke.stapler;
 
 import org.codehaus.plexus.compiler.CompilerConfiguration;
 import org.codehaus.plexus.compiler.CompilerException;
+import org.codehaus.plexus.compiler.CompilerError;
 import org.codehaus.plexus.compiler.javac.JavacCompiler;
+import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.cli.Commandline;
+import org.codehaus.plexus.util.cli.CommandLineUtils;
+import org.codehaus.plexus.util.cli.CommandLineException;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.StringReader;
+import java.io.FileWriter;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,7 +56,15 @@ public class AptCompiler extends JavacCompiler {
         config.addCompilerCustomArgument("-s",new File(config.getOutputLocation()).getAbsolutePath());
         String[] args = buildCompilerArguments( config, sourceFiles );
 
-        return compileInProcess( args );
+        if (config.isFork()) {
+            // TODO: forking a compiler requires classpath set up and passing AnnotationProcessorFactory.
+            String executable = config.getExecutable();
+            if (StringUtils.isEmpty(executable))
+                executable = new File(new File(System.getProperty("java.home")),"../bin/apt").getAbsolutePath();
+            return compileOutOfProcess(config, executable, args);
+        } else {
+            return compileInProcess(args);
+        }
     }
 
     /**
@@ -67,5 +84,90 @@ public class AptCompiler extends JavacCompiler {
 
         // TODO: should I try to parse the output?
         return Collections.emptyList();
+    }
+
+    protected List compileOutOfProcess(CompilerConfiguration config, String executable, String[] args)
+            throws CompilerException {
+        Commandline cli = new Commandline();
+
+        cli.setWorkingDirectory(config.getWorkingDirectory().getAbsolutePath());
+
+        cli.setExecutable(executable);
+
+        try {
+            File argumentsFile = createFileWithArguments(args);
+            cli.addArguments(new String[]{"@" + argumentsFile.getCanonicalPath().replace(File.separatorChar, '/')});
+
+            if (!StringUtils.isEmpty(config.getMaxmem())) {
+                cli.addArguments(new String[]{"-J-Xmx" + config.getMaxmem()});
+            }
+
+            if (!StringUtils.isEmpty(config.getMeminitial())) {
+                cli.addArguments(new String[]{"-J-Xms" + config.getMeminitial()});
+            }
+        }
+        catch (IOException e) {
+            throw new CompilerException("Error creating file with javac arguments", e);
+        }
+
+        CommandLineUtils.StringStreamConsumer out = new CommandLineUtils.StringStreamConsumer();
+
+        CommandLineUtils.StringStreamConsumer err = new CommandLineUtils.StringStreamConsumer();
+
+        int returnCode;
+
+        List<CompilerError> messages;
+
+        try {
+            returnCode = CommandLineUtils.executeCommandLine(cli, out, err);
+
+            messages = parseModernStream(new BufferedReader(new StringReader(err.getOutput())));
+        }
+        catch (CommandLineException e) {
+            throw new CompilerException("Error while executing the external compiler.", e);
+        }
+        catch (IOException e) {
+            throw new CompilerException("Error while executing the external compiler.", e);
+        }
+
+        if (returnCode != 0 && messages.isEmpty()) {
+            if (err.getOutput().length() == 0) {
+                throw new CompilerException("Unknown error trying to execute the external compiler: " + EOL
+                        + cli.toString());
+            } else {
+                messages.add(new CompilerError("Failure executing javac,  but could not parse the error:" + EOL
+                        + err.getOutput(), true));
+            }
+        }
+
+        return messages;
+    }
+
+    private File createFileWithArguments(String[] args) throws IOException {
+        PrintWriter writer = null;
+        try {
+            File tempFile = File.createTempFile(JavacCompiler.class.getName(), "arguments");
+            tempFile.deleteOnExit();
+
+            writer = new PrintWriter(new FileWriter(tempFile));
+
+            for (int i = 0; i < args.length; i++) {
+                String argValue = args[i].replace(File.separatorChar, '/');
+
+                writer.write("\"" + argValue + "\"");
+
+                writer.write(EOL);
+            }
+
+            writer.flush();
+
+            return tempFile;
+
+        }
+        finally {
+            if (writer != null) {
+                writer.close();
+            }
+        }
     }
 }

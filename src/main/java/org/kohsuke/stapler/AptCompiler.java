@@ -17,6 +17,8 @@ import java.io.StringReader;
 import java.io.FileWriter;
 import java.util.Collections;
 import java.util.List;
+import java.net.URL;
+import java.net.MalformedURLException;
 
 /**
  * {@link Compiler} for APT.
@@ -52,18 +54,37 @@ public class AptCompiler extends JavacCompiler {
                           "source file" + ( sourceFiles.length == 1 ? "" : "s" ) +
                           " to " + destinationDir.getAbsolutePath() );
 
+        if (config.isFork()) {
+            // forking a compiler requires classpath set up and passing AnnotationProcessorFactory.
+            config.addClasspathEntry(whichJar(AnnotationProcessorFactoryImpl.class));
+            config.addCompilerCustomArgument("-factory",AnnotationProcessorFactoryImpl.class.getName());
+        }
+
         // this is where the META-INF/services get generated.
         config.addCompilerCustomArgument("-s",new File(config.getOutputLocation()).getAbsolutePath());
         String[] args = buildCompilerArguments( config, sourceFiles );
 
         if (config.isFork()) {
-            // TODO: forking a compiler requires classpath set up and passing AnnotationProcessorFactory.
             String executable = config.getExecutable();
             if (StringUtils.isEmpty(executable))
                 executable = new File(new File(System.getProperty("java.home")),"../bin/apt").getAbsolutePath();
             return compileOutOfProcess(config, executable, args);
         } else {
             return compileInProcess(args);
+        }
+    }
+
+    private String whichJar(Class c) throws CompilerException {
+        try {
+            String url = c.getClassLoader().getResource(c.getName().replace('.', '/') + ".class").toExternalForm();
+            if (url.startsWith("jar:")) {
+                url = url.substring(4);
+                url = url.substring(0,url.indexOf('!'));
+                return new URL(url).getPath();
+            }
+            throw new CompilerException("Failed to infer classpath for "+c);
+        } catch (MalformedURLException e) {
+            throw new CompilerException("Failed to infer classpath for "+c,e);
         }
     }
 

@@ -66,8 +66,13 @@ public class AptCompiler extends JavacCompiler {
 
         if (config.isFork()) {
             String executable = config.getExecutable();
-            if (StringUtils.isEmpty(executable))
-                executable = new File(new File(System.getProperty("java.home")),"../bin/apt").getAbsolutePath();
+            if (StringUtils.isEmpty(executable)) {
+                File apt = new File(new File(System.getProperty("java.home")),"bin/apt"); // Mac puts $JAVA_HOME to JDK
+                if (!apt.exists())
+                    // on other platforms $JAVA_HOME is JRE in JDK.
+                    apt = new File(new File(System.getProperty("java.home")),"../bin/apt");
+                executable = apt.getAbsolutePath();
+            }
             return compileOutOfProcess(config, executable, args);
         } else {
             return compileInProcess(args);

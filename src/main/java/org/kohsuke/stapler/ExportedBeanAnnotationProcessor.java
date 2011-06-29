@@ -57,6 +57,8 @@ import java.util.TreeSet;
  * Handles {@link ExportedBean} and {@link Exported} annotations.
  * 
  * @author Kohsuke Kawaguchi
+ * @deprecated
+ *      Requiring 1.6 for development-time.
  */
 public class ExportedBeanAnnotationProcessor implements AnnotationProcessor {
     private final AnnotationProcessorEnvironment env;

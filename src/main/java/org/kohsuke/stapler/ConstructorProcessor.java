@@ -39,6 +39,8 @@ import java.util.Properties;
  * Handles {@link DataBoundConstructor} annotation and captures parameter names.
  * 
  * @author Kohsuke Kawaguchi
+ * @deprecated
+ *      Requiring 1.6 for development-time.
  */
 public class ConstructorProcessor implements AnnotationProcessor {
     private final AnnotationProcessorEnvironment env;

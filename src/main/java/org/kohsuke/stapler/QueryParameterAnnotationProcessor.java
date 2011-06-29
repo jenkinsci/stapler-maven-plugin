@@ -38,6 +38,8 @@ import java.io.OutputStream;
 /**
  * Handles {@link QueryParameter} annotation and captures parameter names.
  * @author Kohsuke Kawaguchi
+ * @deprecated
+ *      Requiring 1.6 for development-time.
  */
 public class QueryParameterAnnotationProcessor implements AnnotationProcessor {
     private final AnnotationProcessorEnvironment env;

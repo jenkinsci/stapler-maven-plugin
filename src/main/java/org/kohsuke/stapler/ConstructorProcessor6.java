@@ -26,10 +26,6 @@ import java.util.Set;
 public class ConstructorProcessor6 extends AbstractProcessorImpl {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        if (roundEnv.processingOver()) {
-            return false;
-        }
-
         ElementScanner6<Void, Void> scanner = new ElementScanner6<Void, Void>() {
             @Override
             public Void visitExecutable(ExecutableElement e, Void aVoid) {

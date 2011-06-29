@@ -2,13 +2,9 @@ package org.kohsuke.stapler;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
-import javax.tools.StandardLocation;
-
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.*;
 import java.util.Properties;
 
 import static javax.tools.Diagnostic.Kind.*;
@@ -32,13 +28,17 @@ abstract class AbstractProcessorImpl extends AbstractProcessor {
     }
 
     protected void writePropertyFile(Properties p, String name) throws IOException {
-        FileObject f = getResource(name);
+        FileObject f = createResource(name);
         OutputStream os = f.openOutputStream();
         p.store(os,null);
         os.close();
     }
 
     protected FileObject getResource(String name) throws IOException {
+        return processingEnv.getFiler().getResource(CLASS_OUTPUT, "", name);
+    }
+
+    protected FileObject createResource(String name) throws IOException {
         return processingEnv.getFiler().createResource(CLASS_OUTPUT, "", name);
     }
 }

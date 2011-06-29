@@ -110,7 +110,7 @@ public class ExportedBeanAnnotationProcessor6 extends AbstractProcessorImpl {
                 writePropertyFile(javadocs, javadocFile);
             }
 
-            FileObject beans = getResource(STAPLER_BEAN_FILE);
+            FileObject beans = createResource(STAPLER_BEAN_FILE);
             PrintWriter w = new PrintWriter(new OutputStreamWriter(beans.openOutputStream(),"UTF-8"));
             for (String beanName : exposedBeanNames)
                 w.println(beanName);
@@ -126,7 +126,6 @@ public class ExportedBeanAnnotationProcessor6 extends AbstractProcessorImpl {
         Set<String> exposedBeanNames = new TreeSet<String>();
 
         FileObject beans = getResource(STAPLER_BEAN_FILE);
-
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(beans.openInputStream(),"UTF-8"));
             String line;

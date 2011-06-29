@@ -35,7 +35,7 @@ import java.util.Set;
 /**
  * @author Kohsuke Kawaguchi
  * @deprecated
- *      Requiring 1.6 for development-time.
+ *      Requiring 1.6 for development-time. Annotation processing is now a part of the core stapler.
  */
 public final class AnnotationProcessorFactoryImpl implements AnnotationProcessorFactory {
     public Collection<String> supportedOptions() {

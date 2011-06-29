@@ -58,7 +58,7 @@ import java.util.TreeSet;
  * 
  * @author Kohsuke Kawaguchi
  * @deprecated
- *      Requiring 1.6 for development-time.
+ *      Requiring 1.6 for development-time. Annotation processing is now a part of the core stapler.
  */
 public class ExportedBeanAnnotationProcessor implements AnnotationProcessor {
     private final AnnotationProcessorEnvironment env;

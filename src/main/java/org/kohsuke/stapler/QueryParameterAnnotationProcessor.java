@@ -39,7 +39,7 @@ import java.io.OutputStream;
  * Handles {@link QueryParameter} annotation and captures parameter names.
  * @author Kohsuke Kawaguchi
  * @deprecated
- *      Requiring 1.6 for development-time.
+ *      Requiring 1.6 for development-time. Annotation processing is now a part of the core stapler.
  */
 public class QueryParameterAnnotationProcessor implements AnnotationProcessor {
     private final AnnotationProcessorEnvironment env;

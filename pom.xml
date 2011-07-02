@@ -10,9 +10,9 @@
   <description>Maven2 plugin for developing stapler applications</description>
   
   <scm>
-    <connection>scm:svn:https://svn.dev.java.net/svn/stapler/trunk/maven-stapler-plugin</connection>
-    <developerConnection>scm:svn:https://svn.dev.java.net/svn/stapler/trunk/maven-stapler-plugin</developerConnection>
-    <url>https://stapler.dev.java.net/source/browse/stapler/trunk/maven-stapler-plugin/</url>
+    <connection>scm:git:git://github.com/stapler/${project.artifactId}.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/stapler/${project.artifactId}.git</developerConnection>
+    <url>https://github.com/stapler/${project.artifactId}</url>
   </scm>
 
   <licenses>
@@ -25,9 +25,8 @@
 
   <distributionManagement>
     <repository>
-      <uniqueVersion>false</uniqueVersion>
-      <id>java.net-maven2-repository</id>
-      <url>java-net:/maven2-repository/trunk/repository/</url>
+      <id>maven.jenkins-ci.org</id>
+      <url>http://maven.jenkins-ci.org:8081/content/repositories/releases/</url>
     </repository>
   </distributionManagement>
 

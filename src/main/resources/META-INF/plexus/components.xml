@@ -1,7 +1,10 @@
 <component-set>
+  <!--
+    No custom component needed any more, but left for backward compatibility
+  -->
   <components>
 
-    <!-- custom life cycle for stapler-jar -->
+    <!-- custom life cycle for stapler-jar, no longer needed but left for backward compatibility -->
     <component>
       <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
       <role-hint>stapler-jar</role-hint>
@@ -12,8 +15,7 @@
             <id>default</id>
             <phases>
               <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources</process-resources>
-              <!-- use a custom compiler for all stapler annotations processing -->
-              <compile>org.kohsuke.stapler:maven-stapler-plugin:apt-compile</compile>
+              <compile>org.apache.maven.plugins:maven-compiler-plugin:compile</compile>
               <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources</process-test-resources>
               <test-compile>org.kohsuke.stapler:maven-stapler-plugin:apt-test-compile</test-compile>
               <test>org.apache.maven.plugins:maven-surefire-plugin:test</test>
@@ -26,6 +28,7 @@
       </configuration>
     </component>
 
+    <!-- custom life cycle for stapler-war, no longer needed but left for backward compatibility -->
     <component>
       <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
       <role-hint>stapler-war</role-hint>
@@ -37,8 +40,7 @@
             <!-- START SNIPPET: war-lifecycle -->
             <phases>
               <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources</process-resources>
-              <!-- use a custom compiler for all stapler annotations processing -->
-              <compile>org.kohsuke.stapler:maven-stapler-plugin:apt-compile</compile>
+              <compile>org.apache.maven.plugins:maven-compiler-plugin:compile</compile>
               <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources</process-test-resources>
               <test-compile>org.kohsuke.stapler:maven-stapler-plugin:apt-test-compile</test-compile>
               <test>org.apache.maven.plugins:maven-surefire-plugin:test</test>

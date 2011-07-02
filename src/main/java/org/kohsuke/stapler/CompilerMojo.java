@@ -37,6 +37,8 @@ import java.util.Set;
  * @version $Id: CompilerMojo.java 383 2007-08-19 17:12:03Z kohsuke $
  * @phase compile
  * @requiresDependencyResolution compile
+ * @deprecated
+ *      Requiring 1.6 for development-time. Annotation processing is now a part of the core stapler.
  */
 public class CompilerMojo
     extends AbstractCompilerMojo {

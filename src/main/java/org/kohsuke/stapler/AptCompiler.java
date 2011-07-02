@@ -49,6 +49,8 @@ import java.net.MalformedURLException;
  * In Maven, {@link Compiler} handles the actual compiler invocation.
  *
  * @author Kohsuke Kawaguchi
+ * @deprecated
+ *      Requiring 1.6 for development-time. Annotation processing is now a part of the core stapler.
  */
 public class AptCompiler extends JavacCompiler {
 

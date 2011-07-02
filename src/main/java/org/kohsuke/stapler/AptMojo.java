@@ -11,6 +11,8 @@ import java.lang.reflect.Field;
  * @phase compile
  * @requiresDependencyResolution compile
  * @author Kohsuke Kawaguchi
+ * @deprecated
+ *      Requiring 1.6 for development-time. Annotation processing is now a part of the core stapler.
  */
 public class AptMojo extends CompilerMojo {
     public void execute() throws MojoExecutionException, CompilationFailureException {

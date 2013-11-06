@@ -78,12 +78,5 @@
         <addedToClasspath>false</addedToClasspath>
       </configuration>
     </component>
-
-    <component>
-      <role>org.codehaus.plexus.compiler.Compiler</role>
-      <role-hint>stapler-apt</role-hint>
-      <implementation>org.kohsuke.stapler.AptCompiler</implementation>
-      <description />
-    </component>
   </components>
 </component-set>

@@ -4,7 +4,7 @@
   <groupId>org.kohsuke.stapler</groupId>
   <artifactId>maven-stapler-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>1.17</version>
+  <version>1.18-SNAPSHOT</version>
 
   <name>Maven Stapler plugin</name>
   <description>Maven2 plugin for developing stapler applications</description>
@@ -13,7 +13,7 @@
     <connection>scm:git:git://github.com/stapler/${project.artifactId}.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/stapler/${project.artifactId}.git</developerConnection>
     <url>https://github.com/stapler/${project.artifactId}</url>
-    <tag>maven-stapler-plugin-1.17</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <licenses>

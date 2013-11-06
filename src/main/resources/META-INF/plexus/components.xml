@@ -1,6 +1,7 @@
 <component-set>
   <!--
     No custom component needed any more, but left for backward compatibility
+    (TODO can this whole file simply be deleted?)
   -->
   <components>
 

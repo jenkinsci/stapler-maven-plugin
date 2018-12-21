@@ -33,6 +33,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.level>6</java.level>
+    <findbugs.failOnError>false</findbugs.failOnError>
   </properties>
 
   <build>

@@ -22,6 +22,7 @@
  */
 package org.kohsuke.stapler;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -37,9 +38,9 @@ import java.util.regex.Pattern;
 
 /**
  * Represents the progress of l10n effort.
+ * More info: {@code http://d.hatena.ne.jp/ssogabe/20081213/1229175653}
  *
  * @author ssogabe
- * @see http://d.hatena.ne.jp/ssogabe/20081213/1229175653
  */
 public class L10nProgress {
     /**
@@ -144,6 +145,9 @@ public class L10nProgress {
     public void parse(File dir) {
         final HudsonMessages m = new HudsonMessages(dir);
         final File[] files = dir.listFiles();
+        if (files == null) {
+            return;
+        }
         for (final File f : files) {
             final Matcher matcher = FILENAME_PATTERN.matcher(f.getName());
             if (matcher.matches()) {
@@ -165,8 +169,12 @@ public class L10nProgress {
     /**
      * Parse the given directory and all its descendants.
      */
-    public void parseRecursively(final File dir) {
-        for (final File f : dir.listFiles()) {
+    public void parseRecursively(final @Nonnull File dir) {
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return; // nothing to parse
+        }
+        for (final File f : files) {
             if (f.isDirectory()) {
                 parseRecursively(f);
             } else if (f.isFile() && MESSAGES_FILE.equals(f.getName())) {

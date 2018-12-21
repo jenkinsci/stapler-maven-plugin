@@ -33,6 +33,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import javax.annotation.CheckForNull;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -49,7 +50,7 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 /**
- * Alias for <tt>stapler:l10n</tt> mojo. Left for compatibility.
+ * Alias for the {@code stapler:l10n} mojo. Left for compatibility.
  *
  * @author Kohsuke Kawaguchi
  * @goal i18n
@@ -61,7 +62,8 @@ public class LocalizerMojo extends AbstractMojo {
      * @parameter expression="${locale}"
      * @required
      */
-    protected String locale;
+    @CheckForNull
+    protected String locale = null;
 
     /**
      * The maven project.
@@ -112,7 +114,9 @@ public class LocalizerMojo extends AbstractMojo {
 
         String fileName = file.getName();
         fileName=fileName.substring(0,fileName.length()-".jelly".length());
-        fileName+='_'+locale+".properties";
+        if (locale != null) {
+            fileName += '_' + locale + ".properties";
+        }
         File resourceFile = new File(file.getParentFile(),fileName);
 
         if(resourceFile.exists()) {

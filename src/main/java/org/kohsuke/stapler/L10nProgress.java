@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
 
 /**
  * Represents the progress of l10n effort.
- * More info: {@code http://d.hatena.ne.jp/ssogabe/20081213/1229175653}
+ * @see <a href="http://d.hatena.ne.jp/ssogabe/20081213/1229175653">Explanation (in Japanese)</a>
  *
  * @author ssogabe
  */

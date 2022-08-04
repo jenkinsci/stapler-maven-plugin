@@ -24,8 +24,6 @@ package org.kohsuke.stapler;
 
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -47,7 +45,7 @@ public class LocalizerProgressMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     protected MavenProject project;
 
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() {
         L10nProgress r = new L10nProgress();
         for( Resource root : (Collection<Resource>)project.getResources() ) {
             r.parseRecursively(new File(root.getDirectory()));

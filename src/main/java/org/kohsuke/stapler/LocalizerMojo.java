@@ -26,7 +26,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -71,7 +70,7 @@ public class LocalizerMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     protected MavenProject project;
 
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoExecutionException {
         // create parser
         try {
             SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -228,7 +227,7 @@ public class LocalizerMojo extends AbstractMojo {
                     findExpressions();
                 }
 
-                public void characters(char[] ch, int start, int length) throws SAXException {
+                public void characters(char[] ch, int start, int length) {
                     buf.append(ch,start,length);
                 }
 

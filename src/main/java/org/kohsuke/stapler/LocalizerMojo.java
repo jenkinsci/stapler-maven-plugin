@@ -157,9 +157,8 @@ public class LocalizerMojo extends AbstractMojo {
 
         getLog().info("Updating "+resourceFile);
 
-        try {
+        try (RandomAccessFile f = new RandomAccessFile(resourceFile,"rw")) {
             // then add them to the end
-            RandomAccessFile f = new RandomAccessFile(resourceFile,"rw");
             if(f.length()>0) {
                 // add the terminating line end if needed
                 f.seek(f.length()-1);
@@ -168,12 +167,11 @@ public class LocalizerMojo extends AbstractMojo {
                     f.write(System.getProperty("line.separator").getBytes());
                 }
             }
-            f.close();
-            PrintWriter w = new PrintWriter(new FileWriter(resourceFile,true));
-            for (String p : props) {
-                w.println(escape(p)+"=");
+            try (PrintWriter w = new PrintWriter(new FileWriter(resourceFile,true))) {
+                for (String p : props) {
+                    w.println(escape(p) + "=");
+                }
             }
-            w.close();
         } catch (IOException e) {
             throw new MojoExecutionException("Failed to write "+resourceFile,e);
         }

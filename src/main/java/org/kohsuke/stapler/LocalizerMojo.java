@@ -26,7 +26,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -71,15 +70,14 @@ public class LocalizerMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     protected MavenProject project;
 
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    @Override
+    public void execute() throws MojoExecutionException {
         // create parser
         try {
             SAXParserFactory spf = SAXParserFactory.newInstance();
             spf.setNamespaceAware(true);
             parser = spf.newSAXParser();
-        } catch (SAXException e) {
-            throw new Error(e); // impossible
-        } catch (ParserConfigurationException e) {
+        } catch (SAXException | ParserConfigurationException e) {
             throw new Error(e); // impossible
         }
 
@@ -90,25 +88,29 @@ public class LocalizerMojo extends AbstractMojo {
     }
 
     private void process(File file) throws MojoExecutionException {
-        if(file.isDirectory())
+        if (file.isDirectory()) {
             processDirectory(file);
-        else
-        if(file.getName().endsWith(".jelly"))
+        } else if (file.getName().endsWith(".jelly")) {
             processJelly(file);
+        }
     }
 
     private void processDirectory(File dir) throws MojoExecutionException {
         File[] children = dir.listFiles();
-        if(children==null)  return;
-        for (File child : children)
+        if (children == null) {
+            return;
+        }
+        for (File child : children) {
             process(child);
+        }
     }
 
     @SuppressFBWarnings(value = "DM_DEFAULT_ENCODING", justification = "TODO needs triage")
     private void processJelly(File file) throws MojoExecutionException {
         Set<String> props = findAllProperties(file);
-        if(props.isEmpty())
+        if (props.isEmpty()) {
             return; // nothing to generate here.
+        }
 
         String fileName = file.getName();
         fileName=fileName.substring(0,fileName.length()-".jelly".length());
@@ -126,50 +128,50 @@ public class LocalizerMojo extends AbstractMojo {
             // find unnecessary properties = those which are present in the resource file but not in Jelly
             HashSet<String> unnecessaries = new HashSet<String>((Set) resource.keySet());
             unnecessaries.removeAll(props);
-            for (String s : unnecessaries)
+            for (String s : unnecessaries) {
                 getLog().warn("Unused property "+s+" in "+resourceFile);
+            }
 
             // figure out missing properties
             props.removeAll(resource.keySet());
 
             // add NL to the end if necessary
-            try {
+            try (RandomAccessFile f = new RandomAccessFile(resourceFile,"rw")) {
                 // then add them to the end
-                RandomAccessFile f = new RandomAccessFile(resourceFile,"rw");
                 if(f.length()>0) {
                     // add the terminating line end if needed
                     f.seek(f.length()-1);
                     int ch = f.read();
-                    if(!(ch=='\r' || ch=='\n'))
+                    if (!(ch == '\r' || ch == '\n')) {
                         f.write(System.getProperty("line.separator").getBytes());
+                    }
                 }
-                f.close();
             } catch (IOException e) {
                 throw new MojoExecutionException("Failed to write "+resourceFile,e);
             }
         }
 
-        if(props.isEmpty())
+        if (props.isEmpty()) {
             return; // no change to make
+        }
 
         getLog().info("Updating "+resourceFile);
 
-        try {
+        try (RandomAccessFile f = new RandomAccessFile(resourceFile,"rw")) {
             // then add them to the end
-            RandomAccessFile f = new RandomAccessFile(resourceFile,"rw");
             if(f.length()>0) {
                 // add the terminating line end if needed
                 f.seek(f.length()-1);
                 int ch = f.read();
-                if(!(ch=='\r' || ch=='\n'))
+                if (!(ch == '\r' || ch == '\n')) {
                     f.write(System.getProperty("line.separator").getBytes());
+                }
             }
-            f.close();
-            PrintWriter w = new PrintWriter(new FileWriter(resourceFile,true));
-            for (String p : props) {
-                w.println(escape(p)+"=");
+            try (PrintWriter w = new PrintWriter(new FileWriter(resourceFile,true))) {
+                for (String p : props) {
+                    w.println(escape(p) + "=");
+                }
             }
-            w.close();
         } catch (IOException e) {
             throw new MojoExecutionException("Failed to write "+resourceFile,e);
         }
@@ -208,16 +210,18 @@ public class LocalizerMojo extends AbstractMojo {
         getLog().debug("Parsing "+file);
         try {
             // we'd like to preserve order, but don't want duplicates
-            final Set<String> properties = new LinkedHashSet<String>();
+            final Set<String> properties = new LinkedHashSet<>();
 
             parser.parse(file,new DefaultHandler() {
                 private final StringBuilder buf = new StringBuilder();
                 private Locator locator;
 
+                @Override
                 public void setDocumentLocator(Locator locator) {
                     this.locator = locator;
                 }
 
+                @Override
                 public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
                     findExpressions();
                     for( int i=0; i<attributes.getLength(); i++ ) {
@@ -226,11 +230,13 @@ public class LocalizerMojo extends AbstractMojo {
                     }
                 }
 
+                @Override
                 public void endElement(String uri, String localName, String qName) throws SAXException {
                     findExpressions();
                 }
 
-                public void characters(char ch[], int start, int length) throws SAXException {
+                @Override
+                public void characters(char[] ch, int start, int length) {
                     buf.append(ch,start,length);
                 }
 
@@ -242,11 +248,14 @@ public class LocalizerMojo extends AbstractMojo {
                     int idx=-1;
                     do {
                         idx = buf.indexOf("${",idx+1);
-                        if(idx<0)   break;
+                        if (idx < 0) {
+                            break;
+                        }
 
                         int end = buf.indexOf("}",idx);
-                        if(end==-1)
+                        if (end == -1) {
                             throw new SAXParseException("Missing '}'",locator);
+                        }
 
                         onJexlExpression(buf.substring(idx+2,end));
                     } while(true);
@@ -264,7 +273,9 @@ public class LocalizerMojo extends AbstractMojo {
 
                         // if parameters follow, remove them
                         int op = exp.indexOf('(');
-                        if(op>=0)   exp=exp.substring(0,op);
+                        if (op >= 0) {
+                            exp = exp.substring(0, op);
+                        }
                         properties.add(exp);
                     } else {
                         Matcher m = RESOURCE_LITERAL_STRING.matcher(exp);
@@ -275,7 +286,9 @@ public class LocalizerMojo extends AbstractMojo {
 
                             // if parameters follow, remove them
                             int op = literal.indexOf('(');
-                            if(op>=0)   literal=literal.substring(0,op);
+                            if (op >= 0) {
+                                literal = literal.substring(0, op);
+                            }
                             properties.add(literal);
                         }
                     }
@@ -283,9 +296,7 @@ public class LocalizerMojo extends AbstractMojo {
             });
 
             return properties;
-        } catch (SAXException e) {
-            throw new MojoExecutionException("Failed to parse "+file, e);
-        } catch (IOException e) {
+        } catch (SAXException | IOException e) {
             throw new MojoExecutionException("Failed to parse "+file, e);
         }
     }

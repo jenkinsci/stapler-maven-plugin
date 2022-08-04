@@ -195,16 +195,16 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
     private void parseTagLib(File dir, String uri, Library lib) throws IOException {
         getLog().info("Processing "+dir);
 
-        List markerFile = FileUtils.readLines(new File(dir, "taglib"));
+        List<String> markerFile = FileUtils.readLines(new File(dir, "taglib"));
         if (markerFile.size() == 0) {
             markerFile.add(uri);
         }
 
         // write the attributes
-        lib.name(markerFile.get(0).toString());
+        lib.name(markerFile.get(0));
         lib.prefix(uri.substring(uri.lastIndexOf('/')+1)).uri(uri);
         // doc
-        lib.doc()._pcdata(join(markerFile));
+        lib.doc()._pcdata(String.join("\n", markerFile));
 
         File[] tagFiles = dir.listFiles(f -> f.getName().endsWith(".jelly"));
         if (tagFiles == null) {
@@ -250,17 +250,6 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
         } catch (DocumentException e) {
             throw new IOException("Failed to parse " + tagFile, e);
         }
-    }
-
-    private String join(List list) {
-        StringBuilder buf = new StringBuilder();
-        for (Object item : list) {
-            if (buf.length() > 0) {
-                buf.append('\n');
-            }
-            buf.append(item);
-        }
-        return buf.toString();
     }
 
 //

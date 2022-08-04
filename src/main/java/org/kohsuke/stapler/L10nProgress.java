@@ -45,16 +45,16 @@ public class L10nProgress {
     /**
      * Locales used in the set of files parsed.
      */
-    private final Set<String> locales = new TreeSet<String>();
+    private final Set<String> locales = new TreeSet<>();
 
-    private final List<HudsonMessages> messages = new ArrayList<HudsonMessages>();
+    private final List<HudsonMessages> messages = new ArrayList<>();
 
     /**
      * Information per directory.
      */
     public final class HudsonMessages {
         private final File dir;
-        private final Map<String, Integer> map = new HashMap<String, Integer>();
+        private final Map<String, Integer> map = new HashMap<>();
 
         public HudsonMessages(final File dir) {
             this.dir = dir;
@@ -97,12 +97,13 @@ public class L10nProgress {
      */
     public HudsonMessages getTotal() {
         HudsonMessages sum = new HudsonMessages(new File("total"));
-        ArrayList<String> localesPlusOne = new ArrayList<String>(locales);
+        ArrayList<String> localesPlusOne = new ArrayList<>(locales);
         localesPlusOne.add("");
         for (String locale : localesPlusOne) {
             int cnt=0;
-            for (HudsonMessages m : messages)
+            for (HudsonMessages m : messages) {
                 cnt += m.getCnt(locale);
+            }
             sum.setCnt(locale,cnt);
         }
         return sum;
@@ -135,8 +136,9 @@ public class L10nProgress {
         }
         b.append("\n");
 
-        for (final HudsonMessages m : messages)
+        for (final HudsonMessages m : messages) {
             m.toHatena(b);
+        }
         getTotal().toHatena(b);
         return b.toString();
     }
@@ -158,15 +160,20 @@ public class L10nProgress {
     }
 
     public void parse(Collection<File> dirs) {
-        for (final File dir : dirs)
+        for (final File dir : dirs) {
             parse(dir);
+        }
     }
 
     /**
      * Parse the given directory and all its descendants.
      */
     public void parseRecursively(final File dir) {
-        for (final File f : dir.listFiles()) {
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return; // nothing to parse
+        }
+        for (final File f : files) {
             if (f.isDirectory()) {
                 parseRecursively(f);
             } else if (f.isFile() && MESSAGES_FILE.equals(f.getName())) {

@@ -230,7 +230,7 @@ public class LocalizerMojo extends AbstractMojo {
                     findExpressions();
                 }
 
-                public void characters(char ch[], int start, int length) throws SAXException {
+                public void characters(char[] ch, int start, int length) throws SAXException {
                     buf.append(ch,start,length);
                 }
 

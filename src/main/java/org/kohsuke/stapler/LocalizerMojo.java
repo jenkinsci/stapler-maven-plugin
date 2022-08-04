@@ -22,6 +22,8 @@
  */
 package org.kohsuke.stapler;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -105,6 +107,7 @@ public class LocalizerMojo extends AbstractMojo {
             process(child);
     }
 
+    @SuppressFBWarnings(value = "DM_DEFAULT_ENCODING", justification = "TODO needs triage")
     private void processJelly(File file) throws MojoExecutionException {
         Set<String> props = findAllProperties(file);
         if(props.isEmpty())

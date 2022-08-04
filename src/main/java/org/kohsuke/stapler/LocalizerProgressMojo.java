@@ -39,7 +39,7 @@ import java.util.Collection;
  * @author ssogabe
  * @see <a href="https://ssogabe.hatenadiary.org/entry/20081213/1229175653">Translation progress</a>
  */
-@Mojo(name="l10n-progress")
+@Mojo(name = "l10n-progress")
 public class LocalizerProgressMojo extends AbstractMojo {
     /**
      * The maven project.

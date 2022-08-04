@@ -76,7 +76,7 @@ import java.util.regex.Pattern;
  *
  * @author Kohsuke Kawaguchi
  */
-@Mojo(name="jelly-taglibdoc", requiresDependencyResolution = ResolutionScope.COMPILE)
+@Mojo(name = "jelly-taglibdoc", requiresDependencyResolution = ResolutionScope.COMPILE)
 @Execute(phase = LifecyclePhase.GENERATE_SOURCES)
 public class TaglibDocMojo extends AbstractMojo implements MavenReport {
     /**

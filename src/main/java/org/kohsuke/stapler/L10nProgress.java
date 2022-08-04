@@ -166,7 +166,11 @@ public class L10nProgress {
      * Parse the given directory and all its descendants.
      */
     public void parseRecursively(final File dir) {
-        for (final File f : dir.listFiles()) {
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return; // nothing to parse
+        }
+        for (final File f : files) {
             if (f.isDirectory()) {
                 parseRecursively(f);
             } else if (f.isFile() && MESSAGES_FILE.equals(f.getName())) {

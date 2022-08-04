@@ -22,6 +22,8 @@
  */
 package org.kohsuke.stapler;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,6 +31,7 @@ import java.io.IOException;
 /**
  * @author Kohsuke Kawaguchi
  */
+@SuppressFBWarnings(value = "NM_SAME_SIMPLE_NAME_AS_SUPERCLASS", justification = "TODO needs triage")
 public class Properties extends java.util.Properties {
     public Properties() {
         super();

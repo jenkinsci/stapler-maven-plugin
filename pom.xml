@@ -12,16 +12,17 @@
   <groupId>org.kohsuke.stapler</groupId>
   <artifactId>maven-stapler-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>1.18-SNAPSHOT</version>
+  <version>${revision}${changelist}</version>
 
   <name>Maven Stapler plugin</name>
   <description>Maven2 plugin for developing stapler applications</description>
+  <url>https://github.com/jenkinsci/${project.artifactId}</url>
   
   <scm>
-    <connection>scm:git:https://github.com/jenkinsci/${project.artifactId}.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/jenkinsci/${project.artifactId}.git</developerConnection>
-    <url>https://github.com/jenkinsci/${project.artifactId}</url>
-    <tag>HEAD</tag>
+    <connection>scm:git:https://github.com/${gitHubRepo}.git</connection>
+    <developerConnection>scm:git:git@github.com:${gitHubRepo}.git</developerConnection>
+    <url>https://github.com/${gitHubRepo}</url>
+    <tag>${scmTag}</tag>
   </scm>
 
   <licenses>
@@ -32,12 +33,6 @@
     </license>
   </licenses>
 
-  <distributionManagement>
-    <repository>
-      <id>repo.jenkins-ci.org</id>
-      <url>https://repo.jenkins-ci.org/public/</url>
-    </repository>
-  </distributionManagement>
   <repositories>
     <repository>
       <id>repo.jenkins-ci.org</id>
@@ -52,9 +47,12 @@
   </pluginRepositories>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.version>2.0.1</maven.version>
-    <spotbugs.skip>true</spotbugs.skip>
+    <revision>1.18</revision>
+    <changelist>-SNAPSHOT</changelist>
+    <gitHubRepo>jenkinsci/${project.artifactId}</gitHubRepo>
+    <maven.version>2.2.1</maven.version>
+    <maven-plugin-tools.version>3.6.4</maven-plugin-tools.version>
+    <spotbugs.threshold>High</spotbugs.threshold>
   </properties>
 
   <build>
@@ -62,7 +60,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
-        <version>3.6.4</version>
+        <version>${maven-plugin-tools.version}</version>
         <configuration>
           <goalPrefix>stapler</goalPrefix>
         </configuration>
@@ -129,8 +127,26 @@
       <artifactId>commons-io</artifactId>
       <version>2.11.0</version>
     </dependency>
+    <dependency>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs-annotations</artifactId>
+      <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.code.findbugs</groupId>
+          <artifactId>jsr305</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.plugin-tools</groupId>
+      <artifactId>maven-plugin-annotations</artifactId>
+      <version>${maven-plugin-tools.version}</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
+  <!-- TODO When the minimum Jenkins baseline is bumped past 2.357, this can be deleted. -->
   <profiles>
     <profile>
       <id>jdk-8-and-below</id>

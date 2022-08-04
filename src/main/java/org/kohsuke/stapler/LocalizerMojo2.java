@@ -23,11 +23,13 @@
 
 package org.kohsuke.stapler;
 
+import org.apache.maven.plugins.annotations.Mojo;
+
 /**
  * Generate localized message bundles.
  *
  * @author Kohsuke Kawaguchi
- * @goal l10n
  */
+@Mojo(name = "l10n")
 public class LocalizerMojo2 extends LocalizerMojo {
 }

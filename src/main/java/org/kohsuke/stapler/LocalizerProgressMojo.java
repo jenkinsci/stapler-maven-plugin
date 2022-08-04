@@ -26,6 +26,8 @@ import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
@@ -35,17 +37,14 @@ import java.util.Collection;
  * Prints out the progress of localization.
  *
  * @author ssogabe
- * @see http://d.hatena.ne.jp/ssogabe/20081213/1229175653
- * @goal l10n-progress
+ * @see <a href="https://ssogabe.hatenadiary.org/entry/20081213/1229175653">Translation progress</a>
  */
+@Mojo(name = "l10n-progress")
 public class LocalizerProgressMojo extends AbstractMojo {
     /**
      * The maven project.
-     *
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
      */
+    @Parameter(defaultValue = "${project}", required = true, readonly = true)
     protected MavenProject project;
 
     public void execute() throws MojoExecutionException, MojoFailureException {

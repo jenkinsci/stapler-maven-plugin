@@ -33,6 +33,12 @@ import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Execute;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 import org.apache.maven.reporting.MavenReport;
@@ -60,8 +66,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * Scans Jelly tag libraries from tag files, and generate <tt>taglib.xml</tt>
- * compatible with <tt>maven-jellydoc-plugin</tt>
+ * Scans Jelly tag libraries from tag files, and generate {@code taglib.xml}
+ * compatible with {@code maven-jellydoc-plugin}
  *
  * <p>
  * For productive debugging of this mojo, run "mvn site:run" with debugger.
@@ -69,59 +75,46 @@ import java.util.regex.Pattern;
  * byte code for changes. 
  *
  * @author Kohsuke Kawaguchi
- * @goal jelly-taglibdoc
- * @phase generate-sources
- * @requiresDependencyResolution compile
  */
+@Mojo(name="jelly-taglibdoc", requiresDependencyResolution = ResolutionScope.COMPILE)
+@Execute(phase = LifecyclePhase.GENERATE_SOURCES)
 public class TaglibDocMojo extends AbstractMojo implements MavenReport {
     /**
      * The Maven Project Object
-     *
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
      */
+    @Parameter(defaultValue = "${project}", required = true, readonly = true)
     protected MavenProject project;
 
     /**
      * The plugin dependencies.
-     *
-     * @parameter expression="${plugin.artifacts}"
-     * @required
-     * @readonly
      */
+    @Parameter(defaultValue = "${plugin.artifacts}", required = true, readonly = true)
     private List<Artifact> pluginArtifacts;
 
     /**
      * Version of this plugin.
-     *
-     * @parameter expression="${plugin.version}"
-     * @required
-     * @readonly
      */
+    @Parameter(defaultValue = "${plugin.version}", required = true, readonly = true)
     private String pluginVersion;
 
     /**
      * Regular expression for taglib URIs. If specified,
      * only those taglibs that match these patterns will be generated into
      * documentation.
-     *
-     * @parameter expression="${patterns}"
      */
+    @Parameter(defaultValue = "${patterns}")
     private String[] patterns = new String[]{".*"};
 
     /**
      * Factory for creating artifact objects
-     *
-     * @component
      */
+    @Component
     private ArtifactFactory factory;
 
     /**
      * Used for resolving artifacts
-     *
-     * @component
      */
+    @Component
     private ArtifactResolver resolver;
 
     /**
@@ -131,9 +124,7 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
      */
     private ArtifactRepository localRepository;
 
-    /**
-     * @component
-     */
+    @Component
     private MavenProjectHelper helper;
 
     private JellydocMojo jellydoc;

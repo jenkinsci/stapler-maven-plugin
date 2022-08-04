@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
  * Represents the progress of l10n effort.
  *
  * @author ssogabe
- * @see http://d.hatena.ne.jp/ssogabe/20081213/1229175653
+ * @see <a href="https://ssogabe.hatenadiary.org/entry/20081213/1229175653">Translation progress</a>
  */
 public class L10nProgress {
     /**

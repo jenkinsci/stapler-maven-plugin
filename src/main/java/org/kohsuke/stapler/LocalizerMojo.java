@@ -27,6 +27,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.model.Resource;
 import org.xml.sax.Attributes;
@@ -51,27 +53,22 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 /**
- * Alias for <tt>stapler:l10n</tt> mojo. Left for compatibility.
+ * Alias for {@code stapler:l10n} mojo. Left for compatibility.
  *
  * @author Kohsuke Kawaguchi
- * @goal i18n
  */
+@Mojo(name = "i18n")
 public class LocalizerMojo extends AbstractMojo {
     /**
      * The locale to generate properties for.
-     *
-     * @parameter expression="${locale}"
-     * @required
      */
+    @Parameter(defaultValue = "${locale}", required = true)
     protected String locale;
 
     /**
      * The maven project.
-     *
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
      */
+    @Parameter(defaultValue = "${project}", required = true, readonly = true)
     protected MavenProject project;
 
     public void execute() throws MojoExecutionException, MojoFailureException {

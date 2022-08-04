@@ -245,9 +245,7 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
                 }
             }
         } catch (DocumentException e) {
-            IOException x = new IOException("Failed to parse " + tagFile);
-            x.initCause(e);
-            throw x;
+            throw new IOException("Failed to parse " + tagFile, e);
         }
     }
 

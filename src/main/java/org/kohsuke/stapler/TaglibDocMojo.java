@@ -119,9 +119,8 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
 
     /**
      * The local repository where the artifacts are located.
-     *
-     * @parameter expression="${localRepository}"
      */
+    @Parameter(defaultValue = "${localRepository}")
     private ArtifactRepository localRepository;
 
     @Component

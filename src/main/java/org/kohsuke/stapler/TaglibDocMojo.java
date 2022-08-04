@@ -55,7 +55,6 @@ import org.jvnet.maven.jellydoc.Tag;
 import org.jvnet.maven.jellydoc.Tags;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -181,11 +180,7 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
         }
 
         // scan subdirs
-        File[] subdirs = dir.listFiles(new FileFilter() {
-            public boolean accept(File f) {
-                return f.isDirectory();
-            }
-        });
+        File[] subdirs = dir.listFiles(File::isDirectory);
         if(subdirs==null)   return;
         for (File subdir : subdirs)
             scanTagLibs(subdir,uri+'/'+subdir.getName(), tags);
@@ -204,11 +199,7 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
         // doc
         lib.doc()._pcdata(join(markerFile));
 
-        File[] tagFiles = dir.listFiles(new FileFilter() {
-            public boolean accept(File f) {
-                return f.getName().endsWith(".jelly");
-            }
-        });
+        File[] tagFiles = dir.listFiles(f -> f.getName().endsWith(".jelly"));
         if(tagFiles==null)  return;
         for (File tagFile : tagFiles)
             parseTagFile(tagFile,lib.tag());

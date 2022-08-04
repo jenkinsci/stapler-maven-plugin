@@ -45,16 +45,16 @@ public class L10nProgress {
     /**
      * Locales used in the set of files parsed.
      */
-    private final Set<String> locales = new TreeSet<String>();
+    private final Set<String> locales = new TreeSet<>();
 
-    private final List<HudsonMessages> messages = new ArrayList<HudsonMessages>();
+    private final List<HudsonMessages> messages = new ArrayList<>();
 
     /**
      * Information per directory.
      */
     public final class HudsonMessages {
         private final File dir;
-        private final Map<String, Integer> map = new HashMap<String, Integer>();
+        private final Map<String, Integer> map = new HashMap<>();
 
         public HudsonMessages(final File dir) {
             this.dir = dir;
@@ -97,7 +97,7 @@ public class L10nProgress {
      */
     public HudsonMessages getTotal() {
         HudsonMessages sum = new HudsonMessages(new File("total"));
-        ArrayList<String> localesPlusOne = new ArrayList<String>(locales);
+        ArrayList<String> localesPlusOne = new ArrayList<>(locales);
         localesPlusOne.add("");
         for (String locale : localesPlusOne) {
             int cnt=0;

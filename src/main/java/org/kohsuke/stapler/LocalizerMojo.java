@@ -206,7 +206,7 @@ public class LocalizerMojo extends AbstractMojo {
         getLog().debug("Parsing "+file);
         try {
             // we'd like to preserve order, but don't want duplicates
-            final Set<String> properties = new LinkedHashSet<String>();
+            final Set<String> properties = new LinkedHashSet<>();
 
             parser.parse(file,new DefaultHandler() {
                 private final StringBuilder buf = new StringBuilder();

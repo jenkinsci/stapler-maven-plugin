@@ -297,7 +297,7 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
         return getJellydocMojo().canGenerateReport();
     }
 
-    private static final Map<String,String> NAMESPACE_MAP = new HashMap<String, String>();
+    private static final Map<String,String> NAMESPACE_MAP = new HashMap<>();
     static {
         NAMESPACE_MAP.put("s", "jelly:stapler");
         NAMESPACE_MAP.put("d", "jelly:define");

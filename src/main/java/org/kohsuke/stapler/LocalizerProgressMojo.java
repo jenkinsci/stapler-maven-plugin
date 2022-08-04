@@ -45,6 +45,7 @@ public class LocalizerProgressMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     protected MavenProject project;
 
+    @Override
     public void execute() {
         L10nProgress r = new L10nProgress();
         for( Resource root : (Collection<Resource>)project.getResources() ) {

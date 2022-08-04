@@ -70,6 +70,7 @@ public class LocalizerMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     protected MavenProject project;
 
+    @Override
     public void execute() throws MojoExecutionException {
         // create parser
         try {
@@ -209,10 +210,12 @@ public class LocalizerMojo extends AbstractMojo {
                 private final StringBuilder buf = new StringBuilder();
                 private Locator locator;
 
+                @Override
                 public void setDocumentLocator(Locator locator) {
                     this.locator = locator;
                 }
 
+                @Override
                 public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
                     findExpressions();
                     for( int i=0; i<attributes.getLength(); i++ ) {
@@ -221,10 +224,12 @@ public class LocalizerMojo extends AbstractMojo {
                     }
                 }
 
+                @Override
                 public void endElement(String uri, String localName, String qName) throws SAXException {
                     findExpressions();
                 }
 
+                @Override
                 public void characters(char[] ch, int start, int length) {
                     buf.append(ch,start,length);
                 }

@@ -127,6 +127,7 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
 
     private JellydocMojo jellydoc;
 
+    @Override
     public void execute() throws MojoExecutionException {
         writeTaglibXml();
 
@@ -251,38 +252,47 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
 //
 // MavenReport implementation
 //
+    @Override
     public void generate(Sink sink, Locale locale) throws MavenReportException {
         getJellydocMojo().generate(sink,locale);
     }
 
+    @Override
     public String getOutputName() {
         return getJellydocMojo().getOutputName();
     }
 
+    @Override
     public String getName(Locale locale) {
         return getJellydocMojo().getName(locale);
     }
 
+    @Override
     public String getCategoryName() {
         return getJellydocMojo().getCategoryName();
     }
 
+    @Override
     public String getDescription(Locale locale) {
         return getJellydocMojo().getDescription(locale);
     }
 
+    @Override
     public void setReportOutputDirectory(File outputDirectory) {
         getJellydocMojo().setReportOutputDirectory(outputDirectory);
     }
 
+    @Override
     public File getReportOutputDirectory() {
         return getJellydocMojo().getReportOutputDirectory();
     }
 
+    @Override
     public boolean isExternalReport() {
         return getJellydocMojo().isExternalReport();
     }
 
+    @Override
     public boolean canGenerateReport() {
         return getJellydocMojo().canGenerateReport();
     }

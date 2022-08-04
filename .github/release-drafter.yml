@@ -1,1 +1,2 @@
 _extends: .github
+tag-template: maven-stapler-plugin-$NEXT_MINOR_VERSION

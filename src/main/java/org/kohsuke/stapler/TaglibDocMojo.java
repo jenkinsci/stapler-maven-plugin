@@ -47,6 +47,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 import org.jvnet.maven.jellydoc.Attribute;
 import org.jvnet.maven.jellydoc.JellydocMojo;
@@ -237,9 +238,10 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
                 tag.doc("");
             } else {
                 tag.doc(doc.getText());
-                for(Element attr : (List<Element>)doc.selectNodes("s:attribute")) {
+                for (Node node : doc.selectNodes("s:attribute")) {
+                    Element attr = (Element) node;
                     Attribute aw = tag.attribute();
-                    for (org.dom4j.Attribute a : (List<org.dom4j.Attribute>) attr.attributes()) {
+                    for (org.dom4j.Attribute a : attr.attributes()) {
                         aw._attribute(a.getName(),a.getValue());
                     }
                     aw.doc(attr.getText());

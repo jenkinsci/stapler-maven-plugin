@@ -41,11 +41,8 @@ public class Properties extends java.util.Properties {
      * Loads from the file.
      */
     public Properties(File src) throws IOException {
-        FileInputStream in = new FileInputStream(src);
-        try {
+        try (FileInputStream in = new FileInputStream(src)) {
             load(in);
-        } finally {
-            in.close();
         }
     }
 }

@@ -101,8 +101,9 @@ public class L10nProgress {
         localesPlusOne.add("");
         for (String locale : localesPlusOne) {
             int cnt=0;
-            for (HudsonMessages m : messages)
+            for (HudsonMessages m : messages) {
                 cnt += m.getCnt(locale);
+            }
             sum.setCnt(locale,cnt);
         }
         return sum;
@@ -135,8 +136,9 @@ public class L10nProgress {
         }
         b.append("\n");
 
-        for (final HudsonMessages m : messages)
+        for (final HudsonMessages m : messages) {
             m.toHatena(b);
+        }
         getTotal().toHatena(b);
         return b.toString();
     }
@@ -158,8 +160,9 @@ public class L10nProgress {
     }
 
     public void parse(Collection<File> dirs) {
-        for (final File dir : dirs)
+        for (final File dir : dirs) {
             parse(dir);
+        }
     }
 
     /**

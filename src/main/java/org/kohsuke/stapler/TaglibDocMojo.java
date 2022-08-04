@@ -156,8 +156,9 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
             File taglibsXml = new File(project.getBasedir(), "target/taglib.xml");
             taglibsXml.getParentFile().mkdirs();
             Tags tags = TXW.create(Tags.class,new StreamSerializer(new FileOutputStream(taglibsXml)));
-            for(Resource res : (List<Resource>)project.getResources())
+            for (Resource res : (List<Resource>) project.getResources()) {
                 scanTagLibs(new File(res.getDirectory()),"",tags);
+            }
             tags.commit();
         } catch (IOException e) {
             throw new MojoExecutionException("Failed to generate taglibs.xml",e);
@@ -176,23 +177,28 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
                     break;
                 }
             }
-            if(match)
+            if (match) {
                 parseTagLib(dir,uri,tags.library());
+            }
         }
 
         // scan subdirs
         File[] subdirs = dir.listFiles(File::isDirectory);
-        if(subdirs==null)   return;
-        for (File subdir : subdirs)
+        if (subdirs == null) {
+            return;
+        }
+        for (File subdir : subdirs) {
             scanTagLibs(subdir,uri+'/'+subdir.getName(), tags);
+        }
     }
 
     private void parseTagLib(File dir, String uri, Library lib) throws IOException {
         getLog().info("Processing "+dir);
 
         List markerFile = FileUtils.readLines(new File(dir, "taglib"));
-        if(markerFile.size()==0)
+        if (markerFile.size() == 0) {
             markerFile.add(uri);
+        }
 
         // write the attributes
         lib.name(markerFile.get(0).toString());
@@ -201,9 +207,12 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
         lib.doc()._pcdata(join(markerFile));
 
         File[] tagFiles = dir.listFiles(f -> f.getName().endsWith(".jelly"));
-        if(tagFiles==null)  return;
-        for (File tagFile : tagFiles)
+        if (tagFiles == null) {
+            return;
+        }
+        for (File tagFile : tagFiles) {
             parseTagFile(tagFile,lib.tag());
+        }
     }
 
     /**
@@ -221,8 +230,9 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
             Element doc = (Element) jelly.selectSingleNode(".//s:documentation");
 
             // does this tag have a body?
-            if(jelly.selectSingleNode("//d:invokeBody")==null)
+            if (jelly.selectSingleNode("//d:invokeBody") == null) {
                 tag.noContent(true);
+            }
 
             if(doc==null) {
                 tag.doc("");
@@ -230,8 +240,9 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
                 tag.doc(doc.getText());
                 for(Element attr : (List<Element>)doc.selectNodes("s:attribute")) {
                     Attribute aw = tag.attribute();
-                    for (org.dom4j.Attribute a : (List<org.dom4j.Attribute>)attr.attributes())
+                    for (org.dom4j.Attribute a : (List<org.dom4j.Attribute>) attr.attributes()) {
                         aw._attribute(a.getName(),a.getValue());
+                    }
                     aw.doc(attr.getText());
                 }
             }
@@ -243,7 +254,9 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
     private String join(List list) {
         StringBuilder buf = new StringBuilder();
         for (Object item : list) {
-            if(buf.length()>0)  buf.append('\n');
+            if (buf.length() > 0) {
+                buf.append('\n');
+            }
             buf.append(item);
         }
         return buf.toString();

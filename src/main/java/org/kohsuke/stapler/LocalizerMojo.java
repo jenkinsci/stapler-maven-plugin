@@ -88,25 +88,29 @@ public class LocalizerMojo extends AbstractMojo {
     }
 
     private void process(File file) throws MojoExecutionException {
-        if(file.isDirectory())
+        if (file.isDirectory()) {
             processDirectory(file);
-        else
-        if(file.getName().endsWith(".jelly"))
+        } else if (file.getName().endsWith(".jelly")) {
             processJelly(file);
+        }
     }
 
     private void processDirectory(File dir) throws MojoExecutionException {
         File[] children = dir.listFiles();
-        if(children==null)  return;
-        for (File child : children)
+        if (children == null) {
+            return;
+        }
+        for (File child : children) {
             process(child);
+        }
     }
 
     @SuppressFBWarnings(value = "DM_DEFAULT_ENCODING", justification = "TODO needs triage")
     private void processJelly(File file) throws MojoExecutionException {
         Set<String> props = findAllProperties(file);
-        if(props.isEmpty())
+        if (props.isEmpty()) {
             return; // nothing to generate here.
+        }
 
         String fileName = file.getName();
         fileName=fileName.substring(0,fileName.length()-".jelly".length());
@@ -124,8 +128,9 @@ public class LocalizerMojo extends AbstractMojo {
             // find unnecessary properties = those which are present in the resource file but not in Jelly
             HashSet<String> unnecessaries = new HashSet<String>((Set) resource.keySet());
             unnecessaries.removeAll(props);
-            for (String s : unnecessaries)
+            for (String s : unnecessaries) {
                 getLog().warn("Unused property "+s+" in "+resourceFile);
+            }
 
             // figure out missing properties
             props.removeAll(resource.keySet());
@@ -137,16 +142,18 @@ public class LocalizerMojo extends AbstractMojo {
                     // add the terminating line end if needed
                     f.seek(f.length()-1);
                     int ch = f.read();
-                    if(!(ch=='\r' || ch=='\n'))
+                    if (!(ch == '\r' || ch == '\n')) {
                         f.write(System.getProperty("line.separator").getBytes());
+                    }
                 }
             } catch (IOException e) {
                 throw new MojoExecutionException("Failed to write "+resourceFile,e);
             }
         }
 
-        if(props.isEmpty())
+        if (props.isEmpty()) {
             return; // no change to make
+        }
 
         getLog().info("Updating "+resourceFile);
 
@@ -157,8 +164,9 @@ public class LocalizerMojo extends AbstractMojo {
                 // add the terminating line end if needed
                 f.seek(f.length()-1);
                 int ch = f.read();
-                if(!(ch=='\r' || ch=='\n'))
+                if (!(ch == '\r' || ch == '\n')) {
                     f.write(System.getProperty("line.separator").getBytes());
+                }
             }
             f.close();
             PrintWriter w = new PrintWriter(new FileWriter(resourceFile,true));
@@ -242,11 +250,14 @@ public class LocalizerMojo extends AbstractMojo {
                     int idx=-1;
                     do {
                         idx = buf.indexOf("${",idx+1);
-                        if(idx<0)   break;
+                        if (idx < 0) {
+                            break;
+                        }
 
                         int end = buf.indexOf("}",idx);
-                        if(end==-1)
+                        if (end == -1) {
                             throw new SAXParseException("Missing '}'",locator);
+                        }
 
                         onJexlExpression(buf.substring(idx+2,end));
                     } while(true);
@@ -264,7 +275,9 @@ public class LocalizerMojo extends AbstractMojo {
 
                         // if parameters follow, remove them
                         int op = exp.indexOf('(');
-                        if(op>=0)   exp=exp.substring(0,op);
+                        if (op >= 0) {
+                            exp = exp.substring(0, op);
+                        }
                         properties.add(exp);
                     } else {
                         Matcher m = RESOURCE_LITERAL_STRING.matcher(exp);
@@ -275,7 +288,9 @@ public class LocalizerMojo extends AbstractMojo {
 
                             // if parameters follow, remove them
                             int op = literal.indexOf('(');
-                            if(op>=0)   literal=literal.substring(0,op);
+                            if (op >= 0) {
+                                literal = literal.substring(0, op);
+                            }
                             properties.add(literal);
                         }
                     }

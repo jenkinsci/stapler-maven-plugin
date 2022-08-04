@@ -76,9 +76,7 @@ public class LocalizerMojo extends AbstractMojo {
             SAXParserFactory spf = SAXParserFactory.newInstance();
             spf.setNamespaceAware(true);
             parser = spf.newSAXParser();
-        } catch (SAXException e) {
-            throw new Error(e); // impossible
-        } catch (ParserConfigurationException e) {
+        } catch (SAXException | ParserConfigurationException e) {
             throw new Error(e); // impossible
         }
 
@@ -280,9 +278,7 @@ public class LocalizerMojo extends AbstractMojo {
             });
 
             return properties;
-        } catch (SAXException e) {
-            throw new MojoExecutionException("Failed to parse "+file, e);
-        } catch (IOException e) {
+        } catch (SAXException | IOException e) {
             throw new MojoExecutionException("Failed to parse "+file, e);
         }
     }

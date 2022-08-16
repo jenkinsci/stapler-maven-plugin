@@ -27,8 +27,7 @@ import com.sun.xml.txw2.output.StreamSerializer;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.ArtifactResolver;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -42,6 +41,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 import org.apache.maven.reporting.MavenReport;
 import org.apache.maven.reporting.MavenReportException;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
 import org.codehaus.doxia.sink.Sink;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -85,6 +85,12 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
     protected MavenProject project;
 
     /**
+     * The Maven session object.
+     */
+    @Parameter(defaultValue = "${session}", required = true, readonly = true)
+    protected MavenSession session;
+
+    /**
      * The plugin dependencies.
      */
     @Parameter(defaultValue = "${plugin.artifacts}", required = true, readonly = true)
@@ -116,12 +122,6 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
     @Component
     private ArtifactResolver resolver;
 
-    /**
-     * The local repository where the artifacts are located.
-     */
-    @Parameter(defaultValue = "${localRepository}")
-    private ArtifactRepository localRepository;
-
     @Component
     private MavenProjectHelper helper;
 
@@ -144,7 +144,7 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
             };
             jellydoc.factory = factory;
             jellydoc.helper = helper;
-            jellydoc.localRepository = localRepository;
+            jellydoc.session = session;
             jellydoc.project = project;
             jellydoc.resolver = resolver;
         }

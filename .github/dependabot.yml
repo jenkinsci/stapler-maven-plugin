@@ -1,3 +1,4 @@
+---
 version: 2
 updates:
   - package-ecosystem: maven
@@ -6,6 +7,9 @@ updates:
       interval: weekly
     open-pull-requests-limit: 10
     target-branch: master
+    ignore:
+      # Ignore 1.2.0-atlassian-2
+      - dependency-name: "jaxen:jaxen"
   - package-ecosystem: github-actions
     directory: /
     schedule:

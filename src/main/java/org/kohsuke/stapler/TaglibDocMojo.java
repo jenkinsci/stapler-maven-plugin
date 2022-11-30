@@ -24,7 +24,6 @@ package org.kohsuke.stapler;
 
 import com.sun.xml.txw2.TXW;
 import com.sun.xml.txw2.output.StreamSerializer;
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.execution.MavenSession;
@@ -58,6 +57,9 @@ import org.jvnet.maven.jellydoc.Tags;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -156,7 +158,7 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
             File taglibsXml = new File(project.getBasedir(), "target/taglib.xml");
             taglibsXml.getParentFile().mkdirs();
             Tags tags = TXW.create(Tags.class,new StreamSerializer(new FileOutputStream(taglibsXml)));
-            for (Resource res : (List<Resource>) project.getResources()) {
+            for (Resource res : project.getResources()) {
                 scanTagLibs(new File(res.getDirectory()),"",tags);
             }
             tags.commit();
@@ -195,7 +197,8 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
     private void parseTagLib(File dir, String uri, Library lib) throws IOException {
         getLog().info("Processing "+dir);
 
-        List<String> markerFile = FileUtils.readLines(new File(dir, "taglib"));
+        List<String> markerFile = new ArrayList<>(
+                Files.readAllLines(dir.toPath().resolve("taglib"), StandardCharsets.UTF_8));
         if (markerFile.size() == 0) {
             markerFile.add(uri);
         }

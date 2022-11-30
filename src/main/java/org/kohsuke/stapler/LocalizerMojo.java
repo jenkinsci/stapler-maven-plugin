@@ -81,7 +81,7 @@ public class LocalizerMojo extends AbstractMojo {
             throw new Error(e); // impossible
         }
 
-        for( Resource res : (List<Resource>)project.getResources() ) {
+        for (Resource res : project.getResources()) {
             File dir = new File(res.getDirectory());
             processDirectory(dir);
         }

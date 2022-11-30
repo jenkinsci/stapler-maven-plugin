@@ -48,7 +48,7 @@ public class LocalizerProgressMojo extends AbstractMojo {
     @Override
     public void execute() {
         L10nProgress r = new L10nProgress();
-        for( Resource root : (Collection<Resource>)project.getResources() ) {
+        for (Resource root : project.getResources()) {
             r.parseRecursively(new File(root.getDirectory()));
         }
         System.out.println(r.toHatena());

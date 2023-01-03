@@ -26,6 +26,8 @@ import com.sun.xml.txw2.TXW;
 import com.sun.xml.txw2.output.StreamSerializer;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
+import org.apache.maven.doxia.sink.Sink;
+import org.apache.maven.doxia.sink.SinkFactory;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
@@ -38,10 +40,9 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
-import org.apache.maven.reporting.MavenReport;
+import org.apache.maven.reporting.MavenMultiPageReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
-import org.codehaus.doxia.sink.Sink;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentFactory;
@@ -79,7 +80,7 @@ import java.util.regex.Pattern;
  */
 @Mojo(name = "jelly-taglibdoc", requiresDependencyResolution = ResolutionScope.COMPILE)
 @Execute(phase = LifecyclePhase.GENERATE_SOURCES)
-public class TaglibDocMojo extends AbstractMojo implements MavenReport {
+public class TaglibDocMojo extends AbstractMojo implements MavenMultiPageReport {
     /**
      * The Maven Project Object
      */
@@ -256,11 +257,46 @@ public class TaglibDocMojo extends AbstractMojo implements MavenReport {
     }
 
 //
-// MavenReport implementation
+// MavenMultiPageReport implementation
 //
+    /**
+     * Generate a report.
+     *
+     * @param sink The sink to use for the generation.
+     * @param locale The desired locale in which to generate the report; could be null.
+     * @throws MavenReportException if any error occurs
+     * @deprecated use {@link #generate(Sink, SinkFactory, Locale)} instead.
+     */
+    @Deprecated
     @Override
+    public void generate(org.codehaus.doxia.sink.Sink sink, Locale locale) throws MavenReportException {
+        getJellydocMojo().generate(sink, locale);
+    }
+
+    /**
+     * Generate a report.
+     *
+     * @param sink The sink to use for the generation.
+     * @param locale The desired locale in which to generate the report; could be null.
+     * @throws MavenReportException if any error occurs
+     * @deprecated use {@link #generate(Sink, SinkFactory, Locale)} instead.
+     */
+    @Deprecated
     public void generate(Sink sink, Locale locale) throws MavenReportException {
-        getJellydocMojo().generate(sink,locale);
+        getJellydocMojo().generate(sink, locale);
+    }
+
+    /**
+     * This method is called when the report generation is invoked by maven-site-plugin.
+     *
+     * @param sink The sink to use for the generation.
+     * @param sinkFactory The sink factory to use for the generation; could be null.
+     * @param locale The desired locale in which to generate the report; could be null.
+     * @throws MavenReportException if any error occurs
+     */
+    @Override
+    public void generate(Sink sink, SinkFactory sinkFactory, Locale locale) throws MavenReportException {
+        getJellydocMojo().generate(sink, sinkFactory, locale);
     }
 
     @Override

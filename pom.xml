@@ -76,6 +76,8 @@
               <rules>
                 <requireUpperBoundDeps>
                   <excludes combine.children="append">
+                    <exclude>org.apache.commons:commons-lang3</exclude>
+                    <exclude>org.slf4j:slf4j-api</exclude>
                     <exclude>xerces:xercesImpl</exclude>
                   </excludes>
                 </requireUpperBoundDeps>

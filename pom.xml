@@ -135,6 +135,12 @@
         <artifactId>plexus-utils</artifactId>
         <version>3.5.0</version>
       </dependency>
+      <dependency>
+        <!-- upper bounds conflict from doxia-integration via maven-reporting-impl via maven-jellydoc-plugin -->
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-interpolation</artifactId>
+        <version>1.26</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -168,7 +174,7 @@
     <dependency>
       <groupId>org.jvnet.maven-jellydoc-plugin</groupId>
       <artifactId>maven-jellydoc-plugin</artifactId>
-      <version>1.10</version>
+      <version>1.11-rc107.33dc688a_2b_92</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>

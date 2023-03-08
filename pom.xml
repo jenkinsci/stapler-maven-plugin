@@ -133,7 +133,7 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-utils</artifactId>
-        <version>3.5.0</version>
+        <version>3.5.1</version>
       </dependency>
       <dependency>
         <!-- upper bounds conflict from doxia-integration via maven-reporting-impl via maven-jellydoc-plugin -->

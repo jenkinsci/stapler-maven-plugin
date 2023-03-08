@@ -50,12 +50,16 @@
     <revision>1.23</revision>
     <changelist>-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/${project.artifactId}</gitHubRepo>
-    <maven.version>3.9.0</maven.version>
+    <maven.version>3.8.1</maven.version> <!-- if we update this all consumers need to be running at least this version -->
     <plexus.version>2.1.1</plexus.version>
     <maven-plugin-tools.version>3.8.1</maven-plugin-tools.version>
     <!-- TODO fix violations -->
     <spotbugs.threshold>High</spotbugs.threshold>
   </properties>
+
+  <prerequisites>
+      <maven>${maven.version}</maven>
+  </prerequisites>
 
   <build>
     <plugins>
@@ -131,6 +135,12 @@
         <artifactId>plexus-utils</artifactId>
         <version>3.5.1</version>
       </dependency>
+      <dependency>
+        <!-- upper bounds conflict from doxia-integration via maven-reporting-impl via maven-jellydoc-plugin -->
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-interpolation</artifactId>
+        <version>1.26</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -164,7 +174,7 @@
     <dependency>
       <groupId>org.jvnet.maven-jellydoc-plugin</groupId>
       <artifactId>maven-jellydoc-plugin</artifactId>
-      <version>1.10</version>
+      <version>1.11</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>

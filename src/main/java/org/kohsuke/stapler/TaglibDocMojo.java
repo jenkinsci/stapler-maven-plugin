@@ -69,7 +69,7 @@ import java.util.regex.Pattern;
 
 /**
  * Scans Jelly tag libraries from tag files, and generate {@code taglib.xml}
- * compatible with {@code maven-jellydoc-plugin}
+ * compatible with {@code jellydoc-maven-plugin}
  *
  * <p>
  * For productive debugging of this mojo, run "mvn site:run" with debugger.

@@ -174,7 +174,7 @@
     <dependency>
       <groupId>io.jenkins.tools.maven</groupId>
       <artifactId>jellydoc-maven-plugin</artifactId>
-      <version>129.vf7c31dffdf17</version>
+      <version>133.vcf3732399b_c1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>

@@ -9,13 +9,13 @@
     <relativePath />
   </parent>
   
-  <groupId>org.kohsuke.stapler</groupId>
-  <artifactId>maven-stapler-plugin</artifactId>
+  <groupId>io.jenkins.tools.maven</groupId>
+  <artifactId>stapler-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>${revision}${changelist}</version>
+  <version>${changelist}</version>
 
-  <name>Maven Stapler plugin</name>
-  <description>Maven2 plugin for developing stapler applications</description>
+  <name>Stapler Maven plugin</name>
+  <description>Maven plugin for developing stapler applications</description>
   <url>https://github.com/jenkinsci/${project.artifactId}</url>
   
   <scm>
@@ -29,7 +29,7 @@
     <license>
       <name>2-clause BSD license</name>
       <distribution>repo</distribution>
-      <url>https://www.opensource.org/licenses/bsd-license.php</url>
+      <url>https://www.opensource.org/license/bsd-2-clause/</url>
     </license>
   </licenses>
 
@@ -47,8 +47,7 @@
   </pluginRepositories>
 
   <properties>
-    <revision>1.24</revision>
-    <changelist>-SNAPSHOT</changelist>
+    <changelist>999999-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/${project.artifactId}</gitHubRepo>
     <maven.version>3.8.1</maven.version> <!-- if we update this all consumers need to be running at least this version -->
     <plexus.version>2.1.1</plexus.version>
@@ -58,7 +57,7 @@
   </properties>
 
   <prerequisites>
-      <maven>${maven.version}</maven>
+    <maven>${maven.version}</maven>
   </prerequisites>
 
   <build>

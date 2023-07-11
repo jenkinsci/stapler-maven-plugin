@@ -22,7 +22,7 @@
     <fluidoSkin>
       <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
       <gitHub>
-        <projectId>jenkinsci/maven-stapler-plugin</projectId>
+        <projectId>jenkinsci/stapler-maven-plugin</projectId>
         <ribbonOrientation>right</ribbonOrientation>
         <ribbonColor>orange</ribbonColor>
       </gitHub>

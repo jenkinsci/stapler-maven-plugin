@@ -1,4 +1,4 @@
-# Maven Stapler Plugin
+# Stapler Maven Plugin
 
 Maven plugin to generate taglib documentation and a variety of other tasks.
 

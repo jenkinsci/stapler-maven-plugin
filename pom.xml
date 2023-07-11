@@ -173,7 +173,7 @@
     <dependency>
       <groupId>io.jenkins.tools.maven</groupId>
       <artifactId>jellydoc-maven-plugin</artifactId>
-      <version>133.vcf3732399b_c1</version>
+      <version>137.v803fea_a_fb_c75</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>

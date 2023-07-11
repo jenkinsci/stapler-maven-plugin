@@ -38,6 +38,10 @@
       <id>repo.jenkins-ci.org</id>
       <url>https://repo.jenkins-ci.org/public/</url>
     </repository>
+    <repository>
+      <id>incrementals.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/artifactory/incrementals/</url>
+    </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>
@@ -174,7 +178,7 @@
     <dependency>
       <groupId>io.jenkins.tools.maven</groupId>
       <artifactId>jellydoc-maven-plugin</artifactId>
-      <version>129.vf7c31dffdf17</version>
+      <version>134.vd25e68c2562c</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>

@@ -23,7 +23,6 @@
 package org.kohsuke.stapler;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

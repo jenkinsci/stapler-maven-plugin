@@ -31,5 +31,4 @@ import org.apache.maven.plugins.annotations.Mojo;
  * @author Kohsuke Kawaguchi
  */
 @Mojo(name = "l10n")
-public class LocalizerMojo2 extends LocalizerMojo {
-}
+public class LocalizerMojo2 extends LocalizerMojo {}

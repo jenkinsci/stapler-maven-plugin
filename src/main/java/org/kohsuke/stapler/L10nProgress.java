@@ -26,12 +26,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,7 +84,11 @@ public class L10nProgress {
          * Dumps this object as a row in the Hatena diary format.
          */
         public void toHatena(StringBuilder b) {
-            b.append("|").append(getDirectoryName()).append("(").append(getCnt("")).append(") |");
+            b.append("|")
+                    .append(getDirectoryName())
+                    .append("(")
+                    .append(getCnt(""))
+                    .append(") |");
             for (final String locale : locales) {
                 b.append(getCnt(locale)).append("(").append(ratio(locale)).append("%)|");
             }
@@ -100,11 +104,11 @@ public class L10nProgress {
         ArrayList<String> localesPlusOne = new ArrayList<>(locales);
         localesPlusOne.add("");
         for (String locale : localesPlusOne) {
-            int cnt=0;
+            int cnt = 0;
             for (HudsonMessages m : messages) {
                 cnt += m.getCnt(locale);
             }
-            sum.setCnt(locale,cnt);
+            sum.setCnt(locale, cnt);
         }
         return sum;
     }

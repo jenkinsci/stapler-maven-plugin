@@ -22,14 +22,12 @@
  */
 package org.kohsuke.stapler;
 
+import java.io.File;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-
-import java.io.File;
-import java.util.Collection;
 
 /**
  * Prints out the progress of localization.

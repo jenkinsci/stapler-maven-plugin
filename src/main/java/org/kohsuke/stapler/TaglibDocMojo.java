@@ -24,6 +24,17 @@ package org.kohsuke.stapler;
 
 import com.sun.xml.txw2.TXW;
 import com.sun.xml.txw2.output.StreamSerializer;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.regex.Pattern;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.doxia.sink.Sink;
@@ -55,18 +66,6 @@ import org.jvnet.maven.jellydoc.Library;
 import org.jvnet.maven.jellydoc.Tag;
 import org.jvnet.maven.jellydoc.Tags;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 /**
  * Scans Jelly tag libraries from tag files, and generate {@code taglib.xml}
  * compatible with {@code jellydoc-maven-plugin}
@@ -74,7 +73,7 @@ import java.util.regex.Pattern;
  * <p>
  * For productive debugging of this mojo, run "mvn site:run" with debugger.
  * Every request will trigger a whole rendering, and you can do hot-swap of
- * byte code for changes. 
+ * byte code for changes.
  *
  * @author Kohsuke Kawaguchi
  */
@@ -111,7 +110,7 @@ public class TaglibDocMojo extends AbstractMojo implements MavenMultiPageReport 
      * documentation.
      */
     @Parameter(defaultValue = "${patterns}")
-    private String[] patterns = new String[]{".*"};
+    private String[] patterns = new String[] {".*"};
 
     /**
      * Factory for creating artifact objects
@@ -138,7 +137,7 @@ public class TaglibDocMojo extends AbstractMojo implements MavenMultiPageReport 
     }
 
     private JellydocMojo getJellydocMojo() {
-        if(jellydoc==null) {
+        if (jellydoc == null) {
             jellydoc = new JellydocMojo() {
                 @Override
                 public void execute() throws MojoExecutionException {
@@ -158,13 +157,13 @@ public class TaglibDocMojo extends AbstractMojo implements MavenMultiPageReport 
         try {
             File taglibsXml = new File(project.getBasedir(), "target/taglib.xml");
             taglibsXml.getParentFile().mkdirs();
-            Tags tags = TXW.create(Tags.class,new StreamSerializer(new FileOutputStream(taglibsXml)));
+            Tags tags = TXW.create(Tags.class, new StreamSerializer(new FileOutputStream(taglibsXml)));
             for (Resource res : project.getResources()) {
-                scanTagLibs(new File(res.getDirectory()),"",tags);
+                scanTagLibs(new File(res.getDirectory()), "", tags);
             }
             tags.commit();
         } catch (IOException e) {
-            throw new MojoExecutionException("Failed to generate taglibs.xml",e);
+            throw new MojoExecutionException("Failed to generate taglibs.xml", e);
         }
     }
 
@@ -172,16 +171,16 @@ public class TaglibDocMojo extends AbstractMojo implements MavenMultiPageReport 
      * Recurisely search for taglibs and call {@link #parseTagLib(File, String, Library)}.
      */
     private void scanTagLibs(File dir, String uri, Tags tags) throws IOException {
-        if(new File(dir,"taglib").exists()) {
-            boolean match = patterns.length==0;
+        if (new File(dir, "taglib").exists()) {
+            boolean match = patterns.length == 0;
             for (String p : patterns) {
-                if(Pattern.matches(p,uri)) {
+                if (Pattern.matches(p, uri)) {
                     match = true;
                     break;
                 }
             }
             if (match) {
-                parseTagLib(dir,uri,tags.library());
+                parseTagLib(dir, uri, tags.library());
             }
         }
 
@@ -191,22 +190,22 @@ public class TaglibDocMojo extends AbstractMojo implements MavenMultiPageReport 
             return;
         }
         for (File subdir : subdirs) {
-            scanTagLibs(subdir,uri+'/'+subdir.getName(), tags);
+            scanTagLibs(subdir, uri + '/' + subdir.getName(), tags);
         }
     }
 
     private void parseTagLib(File dir, String uri, Library lib) throws IOException {
-        getLog().info("Processing "+dir);
+        getLog().info("Processing " + dir);
 
-        List<String> markerFile = new ArrayList<>(
-                Files.readAllLines(dir.toPath().resolve("taglib"), StandardCharsets.UTF_8));
+        List<String> markerFile =
+                new ArrayList<>(Files.readAllLines(dir.toPath().resolve("taglib"), StandardCharsets.UTF_8));
         if (markerFile.size() == 0) {
             markerFile.add(uri);
         }
 
         // write the attributes
         lib.name(markerFile.get(0));
-        lib.prefix(uri.substring(uri.lastIndexOf('/')+1)).uri(uri);
+        lib.prefix(uri.substring(uri.lastIndexOf('/') + 1)).uri(uri);
         // doc
         lib.doc()._pcdata(String.join("\n", markerFile));
 
@@ -215,7 +214,7 @@ public class TaglibDocMojo extends AbstractMojo implements MavenMultiPageReport 
             return;
         }
         for (File tagFile : tagFiles) {
-            parseTagFile(tagFile,lib.tag());
+            parseTagFile(tagFile, lib.tag());
         }
     }
 
@@ -225,7 +224,7 @@ public class TaglibDocMojo extends AbstractMojo implements MavenMultiPageReport 
     private void parseTagFile(File tagFile, Tag tag) throws IOException {
         try {
             String name = tagFile.getName();
-            name = name.substring(0,name.length()-6); // cut off ".jelly"
+            name = name.substring(0, name.length() - 6); // cut off ".jelly"
             tag.name(name);
 
             DocumentFactory f = new DocumentFactory();
@@ -238,7 +237,7 @@ public class TaglibDocMojo extends AbstractMojo implements MavenMultiPageReport 
                 tag.noContent(true);
             }
 
-            if(doc==null) {
+            if (doc == null) {
                 tag.doc("");
             } else {
                 tag.doc(doc.getText());
@@ -246,7 +245,7 @@ public class TaglibDocMojo extends AbstractMojo implements MavenMultiPageReport 
                     Element attr = (Element) node;
                     Attribute aw = tag.attribute();
                     for (org.dom4j.Attribute a : attr.attributes()) {
-                        aw._attribute(a.getName(),a.getValue());
+                        aw._attribute(a.getName(), a.getValue());
                     }
                     aw.doc(attr.getText());
                 }
@@ -256,9 +255,9 @@ public class TaglibDocMojo extends AbstractMojo implements MavenMultiPageReport 
         }
     }
 
-//
-// MavenMultiPageReport implementation
-//
+    //
+    // MavenMultiPageReport implementation
+    //
     /**
      * Generate a report.
      *
@@ -339,7 +338,8 @@ public class TaglibDocMojo extends AbstractMojo implements MavenMultiPageReport 
         return getJellydocMojo().canGenerateReport();
     }
 
-    private static final Map<String,String> NAMESPACE_MAP = new HashMap<>();
+    private static final Map<String, String> NAMESPACE_MAP = new HashMap<>();
+
     static {
         NAMESPACE_MAP.put("s", "jelly:stapler");
         NAMESPACE_MAP.put("d", "jelly:define");

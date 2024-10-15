@@ -103,6 +103,11 @@
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-interpolation</artifactId>
+        <version>1.27</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-utils</artifactId>
         <version>4.0.2</version>
       </dependency>
@@ -129,7 +134,7 @@
     <dependency>
       <groupId>io.jenkins.tools.maven</groupId>
       <artifactId>jellydoc-maven-plugin</artifactId>
-      <version>185.va_049cf95efc1</version>
+      <version>190.ve454d5e0ced2</version>
     </dependency>
     <dependency>
       <groupId>jaxen</groupId>

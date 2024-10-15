@@ -267,20 +267,6 @@ public class TaglibDocMojo extends AbstractMojo implements MavenMultiPageReport 
      * @deprecated use {@link #generate(Sink, SinkFactory, Locale)} instead.
      */
     @Deprecated
-    @Override
-    public void generate(org.codehaus.doxia.sink.Sink sink, Locale locale) throws MavenReportException {
-        getJellydocMojo().generate(sink, locale);
-    }
-
-    /**
-     * Generate a report.
-     *
-     * @param sink The sink to use for the generation.
-     * @param locale The desired locale in which to generate the report; could be null.
-     * @throws MavenReportException if any error occurs
-     * @deprecated use {@link #generate(Sink, SinkFactory, Locale)} instead.
-     */
-    @Deprecated
     public void generate(Sink sink, Locale locale) throws MavenReportException {
         getJellydocMojo().generate(sink, locale);
     }

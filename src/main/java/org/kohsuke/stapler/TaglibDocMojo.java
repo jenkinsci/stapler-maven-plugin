@@ -53,13 +53,13 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 import org.apache.maven.reporting.MavenMultiPageReport;
 import org.apache.maven.reporting.MavenReportException;
-import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
+import org.eclipse.aether.RepositorySystem;
 import org.jvnet.maven.jellydoc.Attribute;
 import org.jvnet.maven.jellydoc.JellydocMojo;
 import org.jvnet.maven.jellydoc.Library;
@@ -122,7 +122,7 @@ public class TaglibDocMojo extends AbstractMojo implements MavenMultiPageReport 
      * Used for resolving artifacts
      */
     @Component
-    private ArtifactResolver resolver;
+    private RepositorySystem repositorySystem;
 
     @Component
     private MavenProjectHelper helper;
@@ -148,7 +148,7 @@ public class TaglibDocMojo extends AbstractMojo implements MavenMultiPageReport 
             jellydoc.helper = helper;
             jellydoc.session = session;
             jellydoc.project = project;
-            jellydoc.resolver = resolver;
+            jellydoc.repositorySystem = repositorySystem;
         }
         return jellydoc;
     }

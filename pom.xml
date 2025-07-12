@@ -134,7 +134,7 @@
     <dependency>
       <groupId>io.jenkins.tools.maven</groupId>
       <artifactId>jellydoc-maven-plugin</artifactId>
-      <version>195.v4662dd79fdb_d</version>
+      <version>${jellydoc-maven-plugin.version}</version>
     </dependency>
     <dependency>
       <groupId>jaxen</groupId>

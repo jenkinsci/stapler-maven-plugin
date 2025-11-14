@@ -43,6 +43,7 @@
     <plexus.version>2.1.1</plexus.version>
     <maven-plugin-tools.version>3.15.2</maven-plugin-tools.version>
     <spotless.check.skip>false</spotless.check.skip>
+    <ban-junit4-imports.skip>false</ban-junit4-imports.skip>
     <!-- TODO fix violations -->
     <spotbugs.threshold>High</spotbugs.threshold>
   </properties>
@@ -178,8 +179,8 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

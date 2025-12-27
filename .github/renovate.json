@@ -1,11 +1,21 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended",
-    ":semanticCommitsDisabled"
+    "github>jenkinsci/renovate-config"
   ],
-  "enabledManagers": [
-    "custom.regex"
+  "ignoreDeps": [
+    "org.apache.maven:maven-artifact",
+    "org.apache.maven:maven-core",
+    "org.apache.maven:maven-model",
+    "org.apache.maven:maven-plugin-api"
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "org.codehaus.plexus:plexus-xml"
+      ],
+      "allowedVersions": "<4.0.0"
+    }
   ],
   "customManagers": [
     {
@@ -19,12 +29,5 @@
       "depNameTemplate": "org.apache.maven.skins:maven-fluido-skin",
       "datasourceTemplate": "maven"
     }
-  ],
-  "labels": [
-    "dependencies"
-  ],
-  "rebaseWhen": "conflicted",
-  "schedule": [
-    "on the first day of the month"
   ]
 }

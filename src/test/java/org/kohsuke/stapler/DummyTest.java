@@ -1,13 +1,14 @@
 package org.kohsuke.stapler;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
-
-public class DummyTest {
+class DummyTest {
 
     @Test
-    public void dummyTrue() {
-        assertTrue(true);
+    void anything() {
+        /*
+         * Intentionally blank. We just want a test that runs with JUnit so that buildPlugin() works
+         * in the Jenkinsfile.
+         */
     }
 }
